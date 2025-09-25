@@ -1,0 +1,14 @@
+# 应用服务 WEB 访问端口
+server:
+  port: 18091
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+knife4j:
+  enable: true
+  basic:
+    enable: false
+    username:
+    password:
+  production: false # 生产环境建议设置为true
