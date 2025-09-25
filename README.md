@@ -2,6 +2,8 @@
 flower-market-backend 花卉市场后端
 
 
+`create database flower_market;`
+
 ~~~ sql
 -- 用户表：存储用户基本信息
 CREATE TABLE `sys_user` (
