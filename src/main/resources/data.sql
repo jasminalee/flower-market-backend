@@ -1,9 +1,9 @@
 
 -- 重新插入测试用户数据
 INSERT INTO sys_user (username, password, nickname, email, phone, addr, status) VALUES
-('admin', '$2a$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', '管理员', 'admin@example.com', '13800000000', '北京市朝阳区', 1),
-('user1', '$2a$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', '用户1', 'user1@example.com', '13800000001', '上海市浦东新区', 1),
-('user2', '$2a$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', '用户2', 'user2@example.com', '13800000002', '广州市天河区', 1);
+('admin', 'admin', '管理员', 'admin@example.com', '13800000000', '北京市朝阳区', 1),
+('user1', 'user1', '用户1', 'user1@example.com', '13800000001', '上海市浦东新区', 1),
+('user2', 'user2', '用户2', 'user2@example.com', '13800000002', '广州市天河区', 1);
 
 -- 插入测试角色数据
 INSERT INTO sys_role (role_name, role_code, description) VALUES
