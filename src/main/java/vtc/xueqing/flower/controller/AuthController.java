@@ -34,8 +34,7 @@ public class AuthController extends BaseController {
     public ResponseResult login(@RequestBody SysUser loginRequest) {
         // 根据用户名查找用户
         SysUser sysUser = sysUserService.getOne(
-            new LambdaQueryWrapper<SysUser>()
-                .eq(SysUser::getUsername, loginRequest.getUsername())
+            new LambdaQueryWrapper<>(loginRequest)
         );
         
         // 检查用户是否存在
