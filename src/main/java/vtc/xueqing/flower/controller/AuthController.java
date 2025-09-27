@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 权限控制层表控制层
+ * 权限控制层表-控制层
  *
  * @author : Xueqing
  */
@@ -26,28 +26,21 @@ public class AuthController extends BaseController {
     @Autowired
     private SysUserService sysUserService;
 
-    /**
-     * 用户登录
-     */
     @ApiOperation("用户登录")
-    @PostMapping("/login")
+    @PostMapping("/login") // @RequestBody 接收一个json
     public ResponseResult login(@RequestBody SysUser loginRequest) {
         // 根据用户名查找用户
         SysUser sysUser = sysUserService.getOne(
             new LambdaQueryWrapper<>(loginRequest)
         );
-        
+
         // 检查用户是否存在
-        if (sysUser == null) {
-            return fail("用户名或者密码错误");
-        }
+        if (sysUser == null)
+            return fail("用户名或者密码错误！");
 
         // 检查用户状态
-        if (sysUser.getStatus() != null && sysUser.getStatus() == 0) {
+        if (sysUser.getStatus() != null && sysUser.getStatus() == 0)
             return fail("用户已被禁用");
-        }
-
         return success("登录成功");
     }
-
 }

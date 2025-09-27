@@ -1,15 +1,10 @@
 package vtc.xueqing.flower.common;
 
-import java.io.Serializable;
-
 /**
  * 全局统一响应结果类
  * @param <T> 响应数据类型
  */
-public class ResponseResult<T> implements Serializable {
-    
-    private static final long serialVersionUID = 1L;
-    
+public class ResponseResult<T>  {
     /**
      * 响应状态码
      */
