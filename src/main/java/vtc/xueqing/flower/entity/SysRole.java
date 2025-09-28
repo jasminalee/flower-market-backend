@@ -2,26 +2,27 @@
 package vtc.xueqing.flower.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import java.util.Date;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.experimental.Accessors;
-
 /**
  * 系统角色表
  * @author : xueqing li
- * @date : 2025-9-27
+ * @date : 2025-9-28
  */
 @ApiModel("系统角色表")
 @TableName("sys_role")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
 public class SysRole implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;

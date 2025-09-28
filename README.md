@@ -140,25 +140,30 @@ controller
     
     var pkVarName = "id";
     var pkDataType = "Long";
+    // 筛选出所有非主键的、字符串类型的字段用于模糊查询
+    var searchableFields = [];
     it.entity.fields.forEach(function(field){
+        if(!field.primaryKey && (field.type === 'String' || field.type === 'text')){
+            searchableFields.push(field);
+        }
         if(field.primaryKey){
             pkVarName = it.func.camel(field.defKey, false);
             pkDataType = field["type"];
-            return;
         }
     });
 }}
 package {{=pkgName}}.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import vtc.xueqing.flower.common.ResponseResult;
 import org.springframework.web.bind.annotation.*;
+import vtc.xueqing.flower.common.ResponseResult;
 import {{=pkgName}}.entity.{{=beanClass}};
 import {{=pkgName}}.service.{{=serviceClass}};
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
  * {{=tableComment}};({{=it.entity.defKey}})表控制层
@@ -174,27 +179,45 @@ public class {{=beanClass}}Controller extends BaseController {
     @ApiOperation("通过ID查询单条数据")
     @GetMapping("{id}")
     public ResponseResult<{{=beanClass}}> queryById(@PathVariable {{=pkDataType}} id){
-        return ResponseResult.ok({{=serviceVarName}}.getById(id));
+        return success({{=serviceVarName}}.getById(id));
     }
 
-    @ApiOperation("分页查询")
+    @ApiOperation("分页模糊查询")
     @GetMapping("/page")
-    public ResponseResult<Page<{{=beanClass}}>> paginQuery({{=beanClass}} {{=beanVarName}}, 
-                                                    @RequestParam(defaultValue = "1") Long current, 
+    public ResponseResult<Page<{{=beanClass}}>> paginQuery(String keywords,
+                                                    @RequestParam(defaultValue = "1") Long current,
                                                     @RequestParam(defaultValue = "10") Long size){
-        return ResponseResult.ok({{=serviceVarName}}.page(getPage(current, size), new LambdaQueryWrapper<>({{=beanVarName}})));
+        LambdaQueryWrapper<{{=beanClass}}> wrapper = new LambdaQueryWrapper<>();
+        if (StrUtil.isNotBlank(keywords)) {
+            // 使用wrapper.and()来包裹OR条件，确保这些OR条件是一个整体
+            wrapper.and(w -> {
+            {{
+                searchableFields.forEach(function(field, index){
+                    var getterMethod = "get" + it.func.camel(field.defKey, true);
+                    if(index > 0) {
+            }}
+                w.or();
+            {{
+                    }
+            }}
+                w.like({{=beanClass}}::{{=getterMethod}}, keywords);
+            {{
+                });
+            }}
+            });
+        }
+        return success({{=serviceVarName}}.page(getPage(current, size), wrapper));
     }
     
     @ApiOperation("新增/更新数据")
     @PostMapping
     public ResponseResult<Boolean> add(@RequestBody {{=beanClass}} {{=beanVarName}}){
-        return ResponseResult.ok({{=serviceVarName}}.saveOrUpdate({{=beanVarName}}));
+        return success({{=serviceVarName}}.saveOrUpdate({{=beanVarName}}));
     }
     
     @ApiOperation("通过主键删除数据")
     @DeleteMapping("{id}")
     public ResponseResult<Boolean> deleteById(@PathVariable {{=pkDataType}} id){
-        return ResponseResult.ok({{=serviceVarName}}.removeById(id));
+        return success({{=serviceVarName}}.removeById(id));
     }
-}
-~~~
+}~~~
