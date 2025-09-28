@@ -2,26 +2,28 @@
 package vtc.xueqing.flower.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.experimental.Accessors;
-
 /**
  * 系统权限表
  * @author : xueqing li
- * @date : 2025-9-27
+ * @date : 2025-9-28
  */
 @ApiModel("系统权限表")
 @TableName("sys_permission")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
 public class SysPermission implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
@@ -35,7 +37,7 @@ public class SysPermission implements Serializable, Cloneable {
     @ApiModelProperty("权限编码")
     private String permissionCode;
     @ApiModelProperty("权限类型（1-菜单，2-按钮，3-接口）")
-    private byte permissionType;
+    private Integer permissionType;
     @ApiModelProperty("资源路径（如URL）")
     private String url;
     @ApiModelProperty("请求方法（GET/POST等，适用于接口权限）")

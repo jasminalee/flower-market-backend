@@ -1,19 +1,21 @@
+
 package vtc.xueqing.flower.controller;
+import java.util.List;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import vtc.xueqing.flower.common.ResponseResult;
 import org.springframework.web.bind.annotation.*;
-import vtc.xueqing.flower.config.BaseController;
 import vtc.xueqing.flower.entity.SysPermission;
 import vtc.xueqing.flower.service.SysPermissionService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import vtc.xueqing.flower.common.ResponseResult;
+import vtc.xueqing.flower.config.BaseController;
 /**
  * 系统权限表;(sys_permission)表控制层
  * @author : Xueqing
  */
-// @Api(tags = "系统权限表对象功能接口")
+@Api(tags = "系统权限表对象功能接口")
 @RestController
 @RequestMapping("/sysPermission")
 public class SysPermissionController extends BaseController {
@@ -29,7 +31,13 @@ public class SysPermissionController extends BaseController {
     public ResponseResult<Page<SysPermission>> paginQuery(SysPermission sysPermission, 
                                                     @RequestParam(defaultValue = "1") Long current, 
                                                     @RequestParam(defaultValue = "10") Long size){
-        return success(sysPermissionService.page(getPage(current, size), new LambdaQueryWrapper<>(sysPermission)));
+        LambdaQueryWrapper<SysPermission> wrapper = new LambdaQueryWrapper<>(sysPermission);
+        return success(sysPermissionService.page(getPage(current, size), wrapper));
+    }
+    @ApiOperation("列表查询")
+    @GetMapping("/list")
+    public ResponseResult<List<SysPermission>> list(SysPermission sysPermission){
+        return success(sysPermissionService.list(new LambdaQueryWrapper<>(sysPermission)));
     }
     @ApiOperation("新增/更新数据")
     @PostMapping
