@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import vtc.xueqing.flower.config.BaseController;
 import vtc.xueqing.flower.entity.SysRolePermission;
 import vtc.xueqing.flower.service.SysRolePermissionService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -12,7 +13,7 @@ import vtc.xueqing.flower.common.ResponseResult;
  * 角色权限关联表;(sys_role_permission)表控制层
  * @author : Xueqing
  */
-@Api(tags = "角色权限关联表对象功能接口")
+// @Api(tags = "角色权限关联表对象功能接口")
 @RestController
 @RequestMapping("/sysRolePermission")
 public class SysRolePermissionController extends BaseController {

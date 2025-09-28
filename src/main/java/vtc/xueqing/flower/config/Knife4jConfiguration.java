@@ -1,6 +1,7 @@
 package vtc.xueqing.flower.config;
 
 import com.google.common.base.Predicates;
+import io.swagger.annotations.Api;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
@@ -26,9 +27,9 @@ public class Knife4jConfiguration {
                 .select()
                 // 使用 test() 替代 apply()
                 .apis(requestHandler ->
-                        RequestHandlerSelectors.basePackage("vtc.xueqing.flower.controller").test(requestHandler)
-                                || RequestHandlerSelectors.withClassAnnotation(RestController.class).test(requestHandler)
-                                || RequestHandlerSelectors.withClassAnnotation(Controller.class).test(requestHandler)
+                        // RequestHandlerSelectors.basePackage("vtc.xueqing.flower.controller").test(requestHandler) ||
+                        //         RequestHandlerSelectors.withClassAnnotation(RestController.class).test(requestHandler) ||
+                                RequestHandlerSelectors.withClassAnnotation(Api.class).test(requestHandler)
                 )
                 .paths(PathSelectors.any())
                 .build();

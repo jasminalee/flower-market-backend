@@ -1,14 +1,13 @@
 package vtc.xueqing.flower.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import vtc.xueqing.flower.config.BaseController;
 import vtc.xueqing.flower.entity.SysUser;
 import vtc.xueqing.flower.entity.SysUserWithRole;
 import vtc.xueqing.flower.service.SysUserService;
-import vtc.xueqing.flower.service.SysUserRoleService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import vtc.xueqing.flower.common.ResponseResult;
 
@@ -29,12 +28,15 @@ public class SysUserController extends BaseController {
         return success(sysUserService.getById(id));
     }
 
+
     @ApiOperation("分页查询")
     @GetMapping("/page")
-    public ResponseResult<Page<SysUser>> paginQuery(SysUser sysUser,
+    public ResponseResult<Page<SysUserWithRole>> paginQuery(SysUser sysUser,
                                                     @RequestParam(defaultValue = "1") Long current,
                                                     @RequestParam(defaultValue = "10") Long size) {
-        return success(sysUserService.page(getPage(current, size), new LambdaQueryWrapper<>(sysUser)));
+        Page<SysUser> page = getPage(current, size);
+        Page<SysUserWithRole> result = sysUserService.pageUsersWithRole(page, sysUser);
+        return success(result);
     }
 
     @ApiOperation("新增/更新系统与用户(包含角色信息)")

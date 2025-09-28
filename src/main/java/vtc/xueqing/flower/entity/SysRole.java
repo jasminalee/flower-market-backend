@@ -2,6 +2,8 @@
 package vtc.xueqing.flower.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import lombok.Builder;
 import lombok.Data;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -9,6 +11,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.experimental.Accessors;
+
 /**
  * 系统角色表
  * @author : xueqing li
@@ -17,6 +21,8 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel("系统角色表")
 @TableName("sys_role")
 @Data
+@Builder
+@Accessors(chain = true)
 public class SysRole implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
     @ApiModelProperty("角色ID")

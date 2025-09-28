@@ -2,8 +2,11 @@ package vtc.xueqing.flower.entity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+import lombok.experimental.SuperBuilder;
 
 /**
  * 系统用户表(包含角色信息)
@@ -12,7 +15,7 @@ import lombok.EqualsAndHashCode;
  */
 @ApiModel("系统用户信息(包含角色信息)")
 @Data
-@EqualsAndHashCode(callSuper = true)
+@Accessors(chain = true)
 public class SysUserWithRole extends SysUser {
 
     private static final long serialVersionUID = 1L;

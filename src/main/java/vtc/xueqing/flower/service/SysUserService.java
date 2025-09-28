@@ -1,5 +1,6 @@
 package vtc.xueqing.flower.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import vtc.xueqing.flower.entity.SysUser;
 import vtc.xueqing.flower.entity.SysUserWithRole;
@@ -18,4 +19,12 @@ public interface SysUserService extends IService<SysUser> {
      * @return 是否成功
      */
     boolean saveOrUpdateWithRole(SysUserWithRole sysUserWithRole);
+    
+    /**
+     * 分页查询用户信息（包含角色ID）
+     * @param page 分页参数
+     * @param sysUser 用户查询条件
+     * @return 分页结果
+     */
+    Page<SysUserWithRole> pageUsersWithRole(Page<SysUser> page, SysUser sysUser);
 }

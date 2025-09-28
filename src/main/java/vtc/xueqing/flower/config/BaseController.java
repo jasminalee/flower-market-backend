@@ -1,4 +1,4 @@
-package vtc.xueqing.flower.controller;
+package vtc.xueqing.flower.config;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import vtc.xueqing.flower.common.ResponseResult;

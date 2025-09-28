@@ -1,25 +1,20 @@
 package vtc.xueqing.flower.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import vtc.xueqing.flower.config.BaseController;
 import vtc.xueqing.flower.entity.SysUser;
-import vtc.xueqing.flower.entity.SysUserWithRole;
 import vtc.xueqing.flower.service.SysUserService;
 import vtc.xueqing.flower.common.ResponseResult;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 权限控制层表-控制层
  *
  * @author : Xueqing
  */
-@Api(tags = "权限认证接口")
+// @Api(tags = "权限认证接口")
 @RestController
 @RequestMapping("/auth")
 public class AuthController extends BaseController {

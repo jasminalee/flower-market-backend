@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.IdType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.Accessors;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -18,6 +21,7 @@ import java.time.LocalDateTime;
 @ApiModel("系统用户信息")
 @TableName("sys_user")
 @Data
+@Accessors(chain = true)
 public class SysUser implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 1L;

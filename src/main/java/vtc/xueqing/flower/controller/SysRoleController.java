@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import vtc.xueqing.flower.config.BaseController;
 import vtc.xueqing.flower.entity.SysRole;
 import vtc.xueqing.flower.service.SysRoleService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -15,7 +16,7 @@ import java.util.List;
  * 系统角色表;(sys_role)表控制层
  * @author : Xueqing
  */
-@Api(tags = "系统角色表对象功能接口")
+// @Api(tags = "系统角色表对象功能接口")
 @RestController
 @RequestMapping("/sysRole")
 public class SysRoleController extends BaseController {
