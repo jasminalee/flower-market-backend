@@ -8,6 +8,9 @@ import vtc.xueqing.flower.entity.SysRole;
 import vtc.xueqing.flower.service.SysRoleService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import vtc.xueqing.flower.common.ResponseResult;
+
+import java.util.List;
+
 /**
  * 系统角色表;(sys_role)表控制层
  * @author : Xueqing
@@ -29,6 +32,11 @@ public class SysRoleController extends BaseController {
                                                     @RequestParam(defaultValue = "1") Long current, 
                                                     @RequestParam(defaultValue = "10") Long size){
         return success(sysRoleService.page(getPage(current, size), new LambdaQueryWrapper<>(sysRole)));
+    }
+    @ApiOperation("列表查询")
+    @GetMapping("/list")
+    public ResponseResult<List<SysRole>> list(SysRole sysRole){
+        return success(sysRoleService.list(new LambdaQueryWrapper<>(sysRole)));
     }
     @ApiOperation("新增/更新数据")
     @PostMapping
