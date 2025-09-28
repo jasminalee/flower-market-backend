@@ -13,7 +13,7 @@ import vtc.xueqing.flower.common.ResponseResult;
  * 用户角色关联表;(sys_user_role)表控制层
  * @author : Xueqing
  */
-@Api(tags = "用户角色关联表对象功能接口")
+// @Api(tags = "用户角色关联表对象功能接口")
 @RestController
 @RequestMapping("/sysUserRole")
 public class SysUserRoleController extends BaseController {

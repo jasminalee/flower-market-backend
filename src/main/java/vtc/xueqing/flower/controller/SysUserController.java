@@ -16,7 +16,7 @@ import vtc.xueqing.flower.common.ResponseResult;
  *
  * @author : Xueqing
  */
-@Api(tags = "系统用户表对象功能接口")
+// @Api(tags = "系统用户表对象功能接口")
 @RestController
 @RequestMapping("/sysUser")
 public class SysUserController extends BaseController {
