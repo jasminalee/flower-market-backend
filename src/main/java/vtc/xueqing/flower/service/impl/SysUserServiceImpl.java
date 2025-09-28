@@ -1,5 +1,7 @@
 package vtc.xueqing.flower.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.BeanUtils;
@@ -13,8 +15,8 @@ import vtc.xueqing.flower.mapper.SysUserMapper;
 import vtc.xueqing.flower.service.SysUserService;
 import vtc.xueqing.flower.service.SysUserRoleService;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -34,45 +36,91 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         boolean saved = this.saveOrUpdate(sysUserWithRole);
         
         if (saved && sysUserWithRole.getRoleId() != null) {
-            // 创建或更新用户角色关联
+            // 先删除用户现有的角色关联关系
+            sysUserRoleService.remove(new LambdaQueryWrapper<SysUserRole>().eq(SysUserRole::getUserId, sysUserWithRole.getId()));
+            
+            // 再新增用户角色关联关系
             SysUserRole sysUserRole = SysUserRole.builder()
                     .userId(sysUserWithRole.getId())
                     .roleId(sysUserWithRole.getRoleId())
+                    .createTime(LocalDateTime.now())
                     .build();
-            // 保存或更新用户角色关联
-            sysUserRoleService.saveOrUpdate(sysUserRole, new LambdaQueryWrapper<>(sysUserRole));
+            sysUserRoleService.save(sysUserRole);
         }
         return saved;
     }
     
     @Override
-    public Page<SysUserWithRole> pageUsersWithRole(Page<SysUser> page, SysUser sysUser) {
-        // 先查询用户分页数据
-        Page<SysUser> userPage = this.page(page, new LambdaQueryWrapper<>(sysUser));
+    public Page<SysUserWithRole> pageUsersWithRole(Page<SysUser> page, String keyword, Integer status) {
+        // 构造查询条件
+        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
         
+        // 关键词模糊查询
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            // 根据关键词模糊查询用户名、昵称、邮箱
+            queryWrapper.and(wrapper -> wrapper
+                    .like(SysUser::getUsername, keyword)
+                    .or()
+                    .like(SysUser::getNickname, keyword)
+                    .or()
+                    .like(SysUser::getEmail, keyword));
+        }
+        
+        // 状态精确查询
+        queryWrapper.eq(ObjectUtil.isNotNull(status), SysUser::getStatus, status);
 
-
+        // 先查询用户分页数据
+        Page<SysUser> userPage = this.page(page, queryWrapper);
+        
+        // 构造返回的分页对象
+        Page<SysUserWithRole> resultPage = new Page<>();
+        resultPage.setCurrent(userPage.getCurrent());
+        resultPage.setSize(userPage.getSize());
+        resultPage.setTotal(userPage.getTotal());
+        resultPage.setPages(userPage.getPages());
+        
+        // 处理空数据情况
+        if (userPage.getRecords() == null || userPage.getRecords().isEmpty()) {
+            resultPage.setRecords(Collections.emptyList());
+            return resultPage;
+        }
+        
         // 查询用户对应的角色信息
         List<Long> userIds = userPage.getRecords().stream()
                 .map(SysUser::getId)
+                .filter(id -> id != null) // 过滤掉空ID
                 .collect(Collectors.toList());
         
-        // 查询用户角色关联信息
-        List<SysUserRole> userRoles = sysUserRoleService.list(
-                new LambdaQueryWrapper<SysUserRole>().in(SysUserRole::getUserId, userIds)
-        );
-        Map<Long, Long> userRoleMap = userRoles.stream().collect(Collectors.toMap(SysUserRole::getUserId, SysUserRole::getRoleId));
+        List<SysUserRole> userRoles;
+        // 只有当userIds不为空时才查询角色信息
+        if (!userIds.isEmpty()) {
+            // 查询用户角色关联信息
+            userRoles = sysUserRoleService.list(
+                    new LambdaQueryWrapper<SysUserRole>().in(SysUserRole::getUserId, userIds)
+            );
+        } else {
+            userRoles = Collections.emptyList();
+        }
 
-        List<SysUserWithRole> collect = userPage.getRecords().stream().map(record -> {
-            SysUserWithRole userWithRole = new SysUserWithRole();
-            BeanUtils.copyProperties(record, userWithRole);
-            userWithRole.setRoleId(userRoleMap.get(record.getId()));
-            return userWithRole;
-        }).collect(Collectors.toList());
-
-        Page<SysUserWithRole> resultPage = new Page<>(page.getCurrent(), page.getSize());
-        resultPage.setTotal(userPage.getTotal());
-        resultPage.setRecords(collect);
+        // 构造包含角色ID的用户信息列表
+        List<SysUserWithRole> userWithRoleList = userPage.getRecords().stream()
+                .filter(user -> user != null && user.getId() != null) // 过滤掉空用户和无ID用户
+                .map(user -> {
+                    SysUserWithRole userWithRole = new SysUserWithRole();
+                    // 拷贝用户属性
+                    BeanUtils.copyProperties(user, userWithRole);
+                    
+                    // 设置角色ID
+                    userRoles.stream()
+                            .filter(userRole -> userRole.getUserId() != null && userRole.getUserId().equals(user.getId()))
+                            .findFirst()
+                            .ifPresent(userRole -> userWithRole.setRoleId(userRole.getRoleId()));
+                    
+                    return userWithRole;
+                })
+                .collect(Collectors.toList());
+        
+        resultPage.setRecords(userWithRoleList);
         return resultPage;
     }
 }

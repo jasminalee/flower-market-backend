@@ -23,8 +23,9 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 分页查询用户信息（包含角色ID）
      * @param page 分页参数
-     * @param sysUser 用户查询条件
+     * @param keyword 搜索关键词
+     * @param status 用户状态
      * @return 分页结果
      */
-    Page<SysUserWithRole> pageUsersWithRole(Page<SysUser> page, SysUser sysUser);
+    Page<SysUserWithRole> pageUsersWithRole(Page<SysUser> page, String keyword, Integer status);
 }

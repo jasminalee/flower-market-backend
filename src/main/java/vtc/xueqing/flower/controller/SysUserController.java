@@ -31,11 +31,12 @@ public class SysUserController extends BaseController {
 
     @ApiOperation("分页查询")
     @GetMapping("/page")
-    public ResponseResult<Page<SysUserWithRole>> paginQuery(SysUser sysUser,
-                                                    @RequestParam(defaultValue = "1") Long current,
-                                                    @RequestParam(defaultValue = "10") Long size) {
+    public ResponseResult<Page<SysUserWithRole>> paginQuery(@RequestParam(value = "keyword", required = false) String keyword,
+                                                    @RequestParam(value = "status", required = false) Integer status,
+                                                    @RequestParam(value = "current", defaultValue = "1") Long current,
+                                                    @RequestParam(value = "size", defaultValue = "10") Long size) {
         Page<SysUser> page = getPage(current, size);
-        Page<SysUserWithRole> result = sysUserService.pageUsersWithRole(page, sysUser);
+        Page<SysUserWithRole> result = sysUserService.pageUsersWithRole(page, keyword, status);
         return success(result);
     }
 
