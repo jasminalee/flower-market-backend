@@ -1,5 +1,7 @@
 package vtc.xueqing.flower.controller;
 
+import cn.hutool.core.text.CharSequenceUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
@@ -51,7 +53,12 @@ public class ProductSkuController extends BaseController {
     @ApiOperation("列表查询")
     @GetMapping("/list")
     public ResponseResult<List<ProductSku>> list(ProductSku productSku){
-        return success(productSkuService.list(new LambdaQueryWrapper<>(productSku)));
+        LambdaQueryWrapper<ProductSku> wrapper = new LambdaQueryWrapper<>();
+        wrapper.like(StrUtil.isNotBlank(productSku.getSkuName()),ProductSku::getSkuName, productSku.getSkuName())
+                .like(StrUtil.isNotBlank(productSku.getSkuCode()),ProductSku::getSkuCode, productSku.getSkuCode())
+        ;
+
+        return success(productSkuService.list(wrapper));
     }
 
     @ApiOperation("新增/更新数据")
