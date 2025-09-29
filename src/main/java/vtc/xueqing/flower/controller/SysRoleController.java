@@ -18,7 +18,7 @@ import java.util.List;
  * 系统角色表;(sys_role)表控制层
  * @author : Xueqing
  */
-@Api(tags = "系统角色表对象功能接口")
+// @Api(tags = "系统角色表对象功能接口")
 @RestController
 @RequestMapping("/sysRole")
 public class SysRoleController extends BaseController {

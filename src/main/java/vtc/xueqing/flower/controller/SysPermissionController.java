@@ -15,7 +15,7 @@ import vtc.xueqing.flower.config.BaseController;
  * 系统权限表;(sys_permission)表控制层
  * @author : Xueqing
  */
-@Api(tags = "系统权限表对象功能接口")
+// @Api(tags = "系统权限表对象功能接口")
 @RestController
 @RequestMapping("/sysPermission")
 public class SysPermissionController extends BaseController {

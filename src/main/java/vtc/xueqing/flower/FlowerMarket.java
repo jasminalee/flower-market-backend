@@ -7,11 +7,13 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 
 @Slf4j
 @SpringBootApplication
 @MapperScan("vtc.xueqing.flower.mapper")
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class FlowerMarket  implements ApplicationRunner {
     @Value("${server.port}")
     private String port;
