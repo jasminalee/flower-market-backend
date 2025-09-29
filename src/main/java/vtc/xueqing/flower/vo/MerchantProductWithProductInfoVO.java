@@ -10,10 +10,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * 商户产品VO类（包含产品信息）
- * 用于封装商户产品信息、商户信息和产品信息，方便前端展示
+ * 商户产品VO类（包含产品信息和SKU信息）
+ * 用于封装商户产品信息、商户信息、产品信息和SKU信息，方便前端展示
  */
-@ApiModel("商户产品VO（包含产品信息）")
+@ApiModel("商户产品VO（包含产品信息和SKU信息）")
 @Data
 public class MerchantProductWithProductInfoVO implements Serializable {
 
@@ -39,6 +39,12 @@ public class MerchantProductWithProductInfoVO implements Serializable {
 
     @ApiModelProperty("SKU ID")
     private Long skuId;
+
+    @ApiModelProperty("SKU名称")
+    private String skuName;
+
+    @ApiModelProperty("SKU编码")
+    private String skuCode;
 
     @ApiModelProperty("商户定价")
     private BigDecimal price;

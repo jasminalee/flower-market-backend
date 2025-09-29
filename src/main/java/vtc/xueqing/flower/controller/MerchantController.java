@@ -63,6 +63,17 @@ public class MerchantController extends BaseController {
         // 这里可以添加商户身份验证逻辑
         // merchantProduct应该包含: merchantId, productId, skuId, price, stock
         
+        // 检查SKU信息
+        ProductSku productSku = productSkuService.getById(merchantProduct.getSkuId());
+        if (productSku == null) {
+            return fail(false);
+        }
+        
+        // 检查商户上架的库存不能超过SKU的参考库存
+        if (merchantProduct.getStock() > productSku.getStock()) {
+            return fail(false);
+        }
+        
         // 检查是否已经上架过该产品
         LambdaQueryWrapper<MerchantProduct> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(MerchantProduct::getMerchantId, merchantProduct.getMerchantId())
@@ -72,6 +83,11 @@ public class MerchantController extends BaseController {
         MerchantProduct existing = merchantProductService.getOne(wrapper);
         if (existing != null) {
             // 如果已存在，更新价格和库存
+            // 检查更新的库存不能超过SKU的参考库存
+            if (merchantProduct.getStock() > productSku.getStock()) {
+                return fail(false);
+            }
+            
             existing.setPrice(merchantProduct.getPrice())
                     .setStock(merchantProduct.getStock())
                     .setStatus(1); // 设置为上架状态
@@ -97,6 +113,17 @@ public class MerchantController extends BaseController {
     @ApiOperation("更新产品库存")
     @PostMapping("/product/updateStock")
     public ResponseResult<Boolean> updateStock(@RequestBody MerchantProduct merchantProduct) {
+        // 检查SKU信息
+        ProductSku productSku = productSkuService.getById(merchantProduct.getSkuId());
+        if (productSku == null) {
+            return fail(false);
+        }
+        
+        // 检查商户更新的库存不能超过SKU的参考库存
+        if (merchantProduct.getStock() > productSku.getStock()) {
+            return fail(false);
+        }
+        
         // 只更新库存信息
         LambdaQueryWrapper<MerchantProduct> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(MerchantProduct::getMerchantId, merchantProduct.getMerchantId())

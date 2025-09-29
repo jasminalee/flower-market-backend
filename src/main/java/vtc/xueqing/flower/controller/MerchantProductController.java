@@ -12,9 +12,11 @@ import vtc.xueqing.flower.common.ResponseResult;
 import vtc.xueqing.flower.config.BaseController;
 import vtc.xueqing.flower.entity.MerchantProduct;
 import vtc.xueqing.flower.entity.Product;
+import vtc.xueqing.flower.entity.ProductSku;
 import vtc.xueqing.flower.entity.SysUser;
 import vtc.xueqing.flower.service.MerchantProductService;
 import vtc.xueqing.flower.service.ProductService;
+import vtc.xueqing.flower.service.ProductSkuService;
 import vtc.xueqing.flower.service.SysUserService;
 import vtc.xueqing.flower.vo.MerchantProductVO;
 import vtc.xueqing.flower.vo.MerchantProductWithProductInfoVO;
@@ -39,6 +41,9 @@ public class MerchantProductController extends BaseController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductSkuService productSkuService;
 
     @Autowired
     private SysUserService sysUserService;
@@ -116,6 +121,13 @@ public class MerchantProductController extends BaseController {
             if (product != null) {
                 vo.setProductName(product.getProductName());
                 vo.setProductCode(product.getProductCode());
+            }
+            
+            // 获取SKU信息
+            ProductSku sku = productSkuService.getById(merchantProduct.getSkuId());
+            if (sku != null) {
+                vo.setSkuName(sku.getSkuName());
+                vo.setSkuCode(sku.getSkuCode());
             }
 
             return vo;
