@@ -81,11 +81,11 @@ INSERT INTO product_sku (product_id, sku_name, sku_code, price, stock, specifica
 -- 清空并插入商户产品测试数据
 truncate table merchant_product;
 INSERT INTO merchant_product (merchant_id, product_id, sku_id, price, stock, status) VALUES
-(2, 1, 1, 109.00, 20, 1),
-(2, 1, 2, 178.00, 10, 1),
-(2, 3, 5, 50.00, 5, 1),
-(3, 2, 3, 85.00, 15, 1),
-(3, 4, 6, 42.00, 8, 1);
+(1, 1, 1, 109.00, 20, 1),
+(1, 1, 2, 178.00, 10, 1),
+(1, 3, 5, 50.00, 5, 1),
+(1, 2, 3, 85.00, 15, 1),
+(1, 4, 6, 42.00, 8, 1);
 
 -- 清空并插入评论测试数据
 truncate table comment;
