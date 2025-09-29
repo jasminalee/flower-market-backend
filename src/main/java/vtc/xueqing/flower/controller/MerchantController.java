@@ -23,7 +23,7 @@ import java.util.List;
  * 专门处理商户上架产品、管理库存等操作
  * @author : Xueqing
  */
-// @Api(tags = "商户操作接口")
+@Api(tags = "商户操作接口")
 @RestController
 @RequestMapping("/merchant")
 public class MerchantController extends BaseController {

@@ -17,7 +17,7 @@ import java.util.List;
  * 通用评论表;(comment)表控制层
  * @author : Xueqing
  */
-// @Api(tags = "通用评论表对象功能接口")
+@Api(tags = "通用评论表对象功能接口")
 @RestController
 @RequestMapping("/comment")
 public class CommentController extends BaseController {

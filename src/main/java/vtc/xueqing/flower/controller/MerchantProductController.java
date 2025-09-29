@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * 商户产品关联表;(merchant_product)表控制层
  * @author : Xueqing
  */
-// @Api(tags = "商户产品关联表对象功能接口")
+@Api(tags = "商户产品关联表对象功能接口")
 @RestController
 @RequestMapping("/merchantProduct")
 public class MerchantProductController extends BaseController {
