@@ -61,11 +61,11 @@ INSERT INTO product_category (category_name, parent_id, category_level, sort, st
 -- 清空并插入产品测试数据
 truncate table product;
 INSERT INTO product (product_name, product_code, category_id, brand, description, main_image, product_type, status) VALUES
-('红玫瑰', 'FLOWER-001', 4, '花语', '鲜艳的红玫瑰，适合表达爱意', 'https://example.com/rose.jpg', 1, 1),
-('白百合', 'FLOWER-002', 5, '花之语', '纯洁的白百合，象征百年好合', 'https://example.com/lily.jpg', 1, 1),
-('园艺剪刀', 'TOOL-001', 6, '园艺大师', '专业园艺剪刀，锋利耐用', 'https://example.com/scissors.jpg', 2, 1),
-('浇水壶', 'TOOL-002', 7, '花园家', '容量大，喷洒均匀的浇水壶', 'https://example.com/watering-can.jpg', 2, 1),
-('有机肥料', 'FERT-001', 8, '绿色家园', '天然有机肥料，环保无污染', 'https://example.com/fertilizer.jpg', 2, 1);
+('红玫瑰', 'FLOWER-001', 4, '花语', '鲜艳的红玫瑰，适合表达爱意', 'http://localhost:18091/images/products/rose.svg', 1, 1),
+('白百合', 'FLOWER-002', 5, '花之语', '纯洁的白百合，象征百年好合', 'http://localhost:18091/images/products/lily.svg', 1, 1),
+('园艺剪刀', 'TOOL-001', 6, '园艺大师', '专业园艺剪刀，锋利耐用', 'http://localhost:18091/images/products/scissors.svg', 2, 1),
+('浇水壶', 'TOOL-002', 7, '花园家', '容量大，喷洒均匀的浇水壶', 'http://localhost:18091/images/products/watering-can.svg', 2, 1),
+('有机肥料', 'FERT-001', 8, '绿色家园', '天然有机肥料，环保无污染', 'http://localhost:18091/images/products/fertilizer.svg', 2, 1);
 
 -- 清空并插入产品SKU测试数据
 truncate table product_sku;

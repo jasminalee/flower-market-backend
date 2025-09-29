@@ -28,6 +28,13 @@
 - `data`: 响应数据
 - `timestamp`: 时间戳
 
+### 1.2 图片资源说明
+
+产品图片等静态资源存放在项目的静态资源目录中，可以通过相对路径直接访问：
+- 产品图片路径：`/images/products/{图片名称}.svg`
+
+例如：`/images/products/rose.svg`
+
 ## 2. 产品相关接口
 
 ### 2.1 获取主页商品列表
@@ -45,7 +52,7 @@
 | size | Long | 否 | 每页数量，默认10 |
 
 **响应示例**:
-```json
+``json
 {
   "code": 200,
   "message": "操作成功",
@@ -54,13 +61,13 @@
       {
         "id": 1,
         "productName": "红玫瑰",
-        "productCode": "FLOWER_001",
-        "categoryId": 1,
-        "brand": "花之语",
-        "description": "新鲜红玫瑰",
-        "mainImage": "http://example.com/image1.jpg",
-        "subImages": "[\"http://example.com/image2.jpg\", \"http://example.com/image3.jpg\"]",
-        "detail": "这是红玫瑰的详细描述",
+        "productCode": "FLOWER-001",
+        "categoryId": 4,
+        "brand": "花语",
+        "description": "鲜艳的红玫瑰，适合表达爱意",
+        "mainImage": "/images/products/rose.svg",
+        "subImages": null,
+        "detail": null,
         "productType": 1,
         "status": 1,
         "createTime": "2025-09-29T10:00:00",
@@ -88,7 +95,7 @@
 | id | Long | 是 | 产品ID |
 
 **响应示例**:
-```json
+``json
 {
   "code": 200,
   "message": "操作成功",
@@ -96,13 +103,13 @@
     "product": {
       "id": 1,
       "productName": "红玫瑰",
-      "productCode": "FLOWER_001",
-      "categoryId": 1,
-      "brand": "花之语",
-      "description": "新鲜红玫瑰",
-      "mainImage": "http://example.com/image1.jpg",
-      "subImages": "[\"http://example.com/image2.jpg\", \"http://example.com/image3.jpg\"]",
-      "detail": "这是红玫瑰的详细描述",
+      "productCode": "FLOWER-001",
+      "categoryId": 4,
+      "brand": "花语",
+      "description": "鲜艳的红玫瑰，适合表达爱意",
+      "mainImage": "/images/products/rose.svg",
+      "subImages": null,
+      "detail": null,
       "productType": 1,
       "status": 1,
       "createTime": "2025-09-29T10:00:00",
@@ -112,11 +119,11 @@
       {
         "id": 1,
         "productId": 1,
-        "skuName": "红玫瑰-11朵",
-        "skuCode": "FLOWER_001_11",
+        "skuName": "红玫瑰-11朵装",
+        "skuCode": "ROSE-11",
         "price": 99.00,
         "stock": 100,
-        "specifications": "{\"count\": 11, \"color\": \"red\"}",
+        "specifications": "{\"颜色\": \"红色\", \"数量\": 11}",
         "status": 1,
         "createTime": "2025-09-29T10:00:00",
         "updateTime": "2025-09-29T10:00:00"
@@ -136,14 +143,14 @@
 **请求URL**: `GET /productCategory/homepage`
 
 **响应示例**:
-```json
+``json
 {
   "code": 200,
   "message": "操作成功",
   "data": [
     {
       "id": 1,
-      "categoryName": "鲜花",
+      "categoryName": "花卉植物",
       "parentId": 0,
       "categoryLevel": 1,
       "sort": 1,
@@ -163,37 +170,27 @@
 **请求URL**: `GET /productCategory/tree`
 
 **响应示例**:
-```json
+``json
 {
   "code": 200,
   "message": "操作成功",
   "data": [
     {
       "id": 1,
-      "categoryName": "鲜花",
+      "categoryName": "花卉植物",
       "parentId": 0,
       "categoryLevel": 1,
       "sort": 1,
       "status": 1,
       "children": [
         {
-          "id": 2,
-          "categoryName": "玫瑰",
+          "id": 4,
+          "categoryName": "玫瑰花",
           "parentId": 1,
           "categoryLevel": 2,
           "sort": 1,
           "status": 1,
-          "children": [
-            {
-              "id": 3,
-              "categoryName": "红玫瑰",
-              "parentId": 2,
-              "categoryLevel": 3,
-              "sort": 1,
-              "status": 1,
-              "children": []
-            }
-          ]
+          "children": []
         }
       ]
     }
@@ -216,29 +213,29 @@
 | productId | Long | 是 | 产品ID |
 
 **响应示例**:
-```json
+``json
 {
   "code": 200,
   "message": "操作成功",
   "data": [
     {
       "id": 1,
-      "merchantId": 1,
+      "merchantId": 2,
       "merchant": {
-        "id": 1,
-        "username": "merchant1",
-        "realName": "商户1",
-        "phone": "13800138000",
-        "email": "merchant1@example.com",
-        "avatar": "http://example.com/avatar.jpg",
+        "id": 2,
+        "username": "user1",
+        "realName": "用户1",
+        "phone": "13800000001",
+        "email": "user1@example.com",
+        "avatar": null,
         "status": 1,
         "createTime": "2025-09-29T10:00:00",
         "updateTime": "2025-09-29T10:00:00"
       },
       "productId": 1,
       "skuId": 1,
-      "price": 99.00,
-      "stock": 100,
+      "price": 109.00,
+      "stock": 20,
       "status": 1
     }
   ],
