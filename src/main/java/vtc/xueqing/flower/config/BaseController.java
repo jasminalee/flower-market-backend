@@ -22,9 +22,9 @@ public class BaseController {
     /**
      * 成功响应，无数据
      *
-     * @return ResponseResult<Void>
+     * @return ResponseResult
      */
-    protected ResponseResult<Void> success() {
+    protected ResponseResult success() {
         return ResponseResult.success();
     }
 
@@ -65,7 +65,10 @@ public class BaseController {
      * @param message 错误信息
      * @return ResponseResult<Void>
      */
-    protected ResponseResult<Void> fail(String message) {
+    // protected ResponseResult<Void> fail(String message) {
+    //     return ResponseResult.fail(message);
+    // }
+    protected ResponseResult<String> fail(String message) {
         return ResponseResult.fail(message);
     }
 

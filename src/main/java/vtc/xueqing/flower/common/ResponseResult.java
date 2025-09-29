@@ -40,7 +40,7 @@ public class ResponseResult<T>  {
      * 成功响应，无数据
      * @return ResponseResult<Void>
      */
-    public static ResponseResult<Void> success() {
+    public static ResponseResult success() {
         return new ResponseResult<>(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getMessage(), null);
     }
     
@@ -79,9 +79,10 @@ public class ResponseResult<T>  {
      * @param message 错误信息
      * @return ResponseResult<Void>
      */
-    public static ResponseResult<Void> fail(String message) {
+    public static ResponseResult<String> fail(String message) {
         return new ResponseResult<>(ResponseCode.FAIL.getCode(), message, null);
     }
+
 
     public  static <T> ResponseResult<T> fail(T body) {
         return new ResponseResult<>(ResponseCode.FAIL.getCode(), "失败", body);

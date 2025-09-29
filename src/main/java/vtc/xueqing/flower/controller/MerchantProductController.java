@@ -176,8 +176,11 @@ public class MerchantProductController extends BaseController {
 
     @ApiOperation("新增/更新数据")
     @PostMapping
-    public ResponseResult<Boolean> add(@RequestBody MerchantProduct merchantProduct) {
-        return success(merchantProductService.saveOrUpdate(merchantProduct));
+    public ResponseResult add(@RequestBody MerchantProduct merchantProduct) {
+        if (merchantProductService.saveOrUpdate(merchantProduct)) {
+            return success(merchantProductService.saveOrUpdate(merchantProduct));
+    } else
+        return fail("已有商户产品信息");
     }
 
     @ApiOperation("通过主键删除数据")
