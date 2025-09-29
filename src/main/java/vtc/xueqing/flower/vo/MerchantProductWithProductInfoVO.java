@@ -1,0 +1,57 @@
+package vtc.xueqing.flower.vo;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import vtc.xueqing.flower.entity.SysUser;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+/**
+ * 商户产品VO类（包含产品信息）
+ * 用于封装商户产品信息、商户信息和产品信息，方便前端展示
+ */
+@ApiModel("商户产品VO（包含产品信息）")
+@Data
+public class MerchantProductWithProductInfoVO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @ApiModelProperty("商户产品ID")
+    private Long id;
+
+    @ApiModelProperty("商户ID")
+    private Long merchantId;
+
+    // @ApiModelProperty("商户信息")
+    // private SysUser merchant;
+
+    @ApiModelProperty("产品ID")
+    private Long productId;
+
+    @ApiModelProperty("产品名称")
+    private String productName;
+
+    @ApiModelProperty("产品编码")
+    private String productCode;
+
+    @ApiModelProperty("SKU ID")
+    private Long skuId;
+
+    @ApiModelProperty("商户定价")
+    private BigDecimal price;
+
+    @ApiModelProperty("商户库存")
+    private Integer stock;
+
+    @ApiModelProperty("状态（0-下架，1-上架）")
+    private Integer status;
+
+    @ApiModelProperty("创建时间")
+    private LocalDateTime createTime;
+
+    @ApiModelProperty("更新时间")
+    private LocalDateTime updateTime;
+}

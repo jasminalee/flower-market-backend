@@ -32,14 +32,14 @@ CREATE TABLE `product` (
     KEY `idx_product_type` (`product_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='产品信息表';
 
--- 产品SKU表：存储产品的不同规格、价格等信息
+-- 产品SKU表：存储产品的不同规格信息，作为平台统一标准规格
 CREATE TABLE `product_sku` (
     `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'SKU ID',
     `product_id` BIGINT(20) NOT NULL COMMENT '产品ID（逻辑关联product表）',
     `sku_name` VARCHAR(200) NOT NULL COMMENT 'SKU名称（如：红色-L）',
     `sku_code` VARCHAR(100) NOT NULL COMMENT 'SKU编码',
-    `price` DECIMAL(10,2) NOT NULL COMMENT '价格',
-    `stock` INT(11) NOT NULL DEFAULT 0 COMMENT '库存数量',
+    `price` DECIMAL(10,2) NOT NULL COMMENT '平台参考价格（供商户参考，不强制使用）',
+    `stock` INT(11) NOT NULL DEFAULT 0 COMMENT '平台参考库存（总库存概念，所有商户该SKU库存之和不应超过此值）',
     `specifications` VARCHAR(500) DEFAULT NULL COMMENT '规格描述，JSON格式存储',
     `status` TINYINT(4) NOT NULL DEFAULT 1 COMMENT '状态（0-无效，1-有效）',
     `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -49,14 +49,14 @@ CREATE TABLE `product_sku` (
     KEY `idx_product_id` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='产品SKU表';
 
--- 商户产品关联表：记录商户上架的产品
+-- 商户产品关联表：记录商户上架的具体产品SKU及商户自定义价格库存
 CREATE TABLE `merchant_product` (
     `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
     `merchant_id` BIGINT(20) NOT NULL COMMENT '商户ID（逻辑关联sys_user表）',
     `product_id` BIGINT(20) NOT NULL COMMENT '产品ID（逻辑关联product表）',
-    `sku_id` BIGINT(20) NOT NULL COMMENT 'SKU ID（逻辑关联product_sku表）',
-    `price` DECIMAL(10,2) NOT NULL COMMENT '商户定价',
-    `stock` INT(11) NOT NULL DEFAULT 0 COMMENT '商户库存',
+    `sku_id` BIGINT(20) NOT NULL COMMENT 'SKU ID（逻辑关联product_sku表，指定具体的产品规格）',
+    `price` DECIMAL(10,2) NOT NULL COMMENT '商户自定义售价（可不同于平台参考价）',
+    `stock` INT(11) NOT NULL DEFAULT 0 COMMENT '商户实际库存（商户独立维护，可不同于平台参考库存）',
     `status` TINYINT(4) NOT NULL DEFAULT 1 COMMENT '状态（0-下架，1-上架）',
     `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
