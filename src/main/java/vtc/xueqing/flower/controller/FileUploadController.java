@@ -60,8 +60,7 @@ public class FileUploadController extends BaseController {
             String uploadPath = projectPath + "/src/main/resources/" + UPLOAD_DIR;
             
             // 按日期创建子目录
-            String datePath = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
-            String finalUploadPath = uploadPath + datePath + "/";
+            String finalUploadPath = uploadPath + "/";
             
             // 创建目录
             File uploadDir = new File(finalUploadPath);
@@ -83,7 +82,7 @@ public class FileUploadController extends BaseController {
             
             // 返回图片访问URL (相对路径)
             // 该URL可直接通过ImageController的getUploadedImage接口访问
-            String imageUrl = "/images/uploads/" + datePath + "/" + newFilename;
+            String imageUrl = "/images/uploads/" + newFilename;
             
             // 构建完整的访问URL（包含协议、主机和端口）
             String fullImageUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + imageUrl;
