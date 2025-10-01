@@ -91,7 +91,7 @@ public class FileUploadController extends BaseController {
             // 记录上传成功后的访问URL到日志
             logger.info("图片上传成功，访问URL: {}, 完整访问路径: {}", imageUrl, fullImageUrl);
             
-            return success("上传成功", imageUrl);
+            return success("上传成功", fullImageUrl);
             
         } catch (Exception e) {
             return fail("上传失败：" + e.getMessage());
