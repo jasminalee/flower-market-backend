@@ -3,6 +3,8 @@ package vtc.xueqing.flower.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
@@ -24,6 +26,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/upload")
 public class FileUploadController extends BaseController {
+    
+    private static final Logger logger = LoggerFactory.getLogger(FileUploadController.class);
     
     // 图片保存目录（相对于resources目录）
     private static final String UPLOAD_DIR = "static/images/uploads/";
@@ -80,6 +84,13 @@ public class FileUploadController extends BaseController {
             // 返回图片访问URL (相对路径)
             // 该URL可直接通过ImageController的getUploadedImage接口访问
             String imageUrl = "/images/uploads/" + datePath + "/" + newFilename;
+            
+            // 构建完整的访问URL（包含协议、主机和端口）
+            String fullImageUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + imageUrl;
+            
+            // 记录上传成功后的访问URL到日志
+            logger.info("图片上传成功，访问URL: {}, 完整访问路径: {}", imageUrl, fullImageUrl);
+            
             return success("上传成功", imageUrl);
             
         } catch (Exception e) {
