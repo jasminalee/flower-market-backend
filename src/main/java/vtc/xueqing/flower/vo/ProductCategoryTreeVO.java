@@ -6,6 +6,7 @@ import lombok.Data;
 import vtc.xueqing.flower.entity.ProductCategory;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -36,6 +37,12 @@ public class ProductCategoryTreeVO implements Serializable {
     @ApiModelProperty("状态")
     private Integer status;
 
+    @ApiModelProperty("创建时间")
+    private LocalDateTime createTime;
+
+    @ApiModelProperty("更新时间")
+    private LocalDateTime updateTime;
+
     @ApiModelProperty("子分类列表")
     private List<ProductCategoryTreeVO> children;
     
@@ -46,5 +53,7 @@ public class ProductCategoryTreeVO implements Serializable {
         this.categoryLevel = category.getCategoryLevel();
         this.sort = category.getSort();
         this.status = category.getStatus();
+        this.createTime = category.getCreateTime();
+        this.updateTime = category.getUpdateTime();
     }
 }

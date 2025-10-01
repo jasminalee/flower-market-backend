@@ -2,11 +2,14 @@ package vtc.xueqing.flower.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 import vtc.xueqing.flower.common.ResponseResult;
 import vtc.xueqing.flower.config.BaseController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,9 +28,12 @@ public class FileUploadController extends BaseController {
     // 图片保存目录（相对于resources目录）
     private static final String UPLOAD_DIR = "static/images/uploads/";
     
-    @ApiOperation("上传图片")
-    @PostMapping("/image")
-    public ResponseResult<String> uploadImage(@RequestParam("file") MultipartFile file) {
+    @ApiOperation(value = "上传图片", notes = "上传图片文件，支持jpg、png、gif格式，文件大小不超过5MB")
+    @PostMapping(value = "/image", consumes = "multipart/form-data")
+    public ResponseResult<String> uploadImage(
+            @ApiParam(value = "上传的图片文件", required = true) 
+            @RequestPart("file") MultipartFile file,
+            @ApiIgnore HttpServletRequest request) {
         try {
             // 检查文件是否为空
             if (file.isEmpty()) {
