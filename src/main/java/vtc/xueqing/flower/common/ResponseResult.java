@@ -88,6 +88,10 @@ public class ResponseResult<T>  {
         return new ResponseResult<>(ResponseCode.FAIL.getCode(), "失败", body);
     }
 
+    public  static <T> ResponseResult<T> fail() {
+        return new ResponseResult<>(ResponseCode.FAIL.getCode(), "失败", null);
+    }
+
     /**
      * 失败响应，自定义状态码和信息
      * @param code 状态码

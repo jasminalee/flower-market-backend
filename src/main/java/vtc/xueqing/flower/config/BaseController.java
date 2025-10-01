@@ -49,6 +49,10 @@ public class BaseController {
         return ResponseResult.success(message, data);
     }
 
+    protected <T> ResponseResult<T> fail() {
+        return ResponseResult.fail();
+    }
+
     /**
      * 失败响应，使用预定义的响应码
      *
