@@ -22,7 +22,7 @@ import java.util.UUID;
  * 用于处理富文本编辑器中的图片上传
  * 上传后的图片可通过 /images/uploads/{datePath}/{filename} 访问
  */
-@Api(tags = "文件上传接口")
+// @Api(tags = "文件上传接口")
 @RestController
 @RequestMapping("/api/upload")
 public class FileUploadController extends BaseController {
