@@ -68,6 +68,21 @@ public class Product implements Serializable, Cloneable {
     @NotNull(message = "状态不能为空")
     private Integer status;
 
+    @ApiModelProperty("平均评分")
+    private BigDecimal avgRating;
+
+    @ApiModelProperty("总销量")
+    private Integer totalSales;
+
+    @ApiModelProperty("最低价格")
+    private BigDecimal minPrice;
+
+    @ApiModelProperty("是否热销(1:是,0:否)")
+    private Integer isHot;
+
+    @ApiModelProperty("是否打折(1:是,0:否)")
+    private Integer isDiscounted;
+
     @ApiModelProperty("创建时间")
     private LocalDateTime createTime;
 

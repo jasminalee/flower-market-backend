@@ -11,6 +11,7 @@ CREATE TABLE `product_category` (
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='产品分类表';
 
+drop table if exists product;
 -- 产品信息表：存储具体的花卉和第三方产品信息
 CREATE TABLE `product` (
     `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '产品ID',
@@ -24,6 +25,11 @@ CREATE TABLE `product` (
     `detail` TEXT DEFAULT NULL COMMENT '产品详情',
     `product_type` TINYINT(4) NOT NULL DEFAULT 1 COMMENT '产品类型（1-花卉，2-第三方产品）',
     `status` TINYINT(4) NOT NULL DEFAULT 1 COMMENT '状态（0-下架，1-上架）',
+    `avg_rating` DECIMAL(3,2) DEFAULT 0.00 COMMENT '平均评分',
+    `total_sales` INT DEFAULT 0 COMMENT '总销量',
+    `min_price` DECIMAL(10,2) DEFAULT 0.00 COMMENT '最低价格',
+    `is_hot` TINYINT(1) DEFAULT 0 COMMENT '是否热销(1:是,0:否)',
+    `is_discounted` TINYINT(1) DEFAULT 0 COMMENT '是否打折(1:是,0:否)',
     `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`),

@@ -15,6 +15,7 @@ import vtc.xueqing.flower.entity.ProductSku;
 import vtc.xueqing.flower.service.ProductService;
 import vtc.xueqing.flower.service.ProductSkuService;
 import vtc.xueqing.flower.vo.ProductDetailVO;
+import vtc.xueqing.flower.vo.ProductListVO;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -62,7 +63,7 @@ public class ProductController extends BaseController {
     
     @ApiOperation("主页商品列表（支持分类和搜索）")
     @GetMapping("/homepage")
-    public ResponseResult<Page<Product>> homepageProducts(
+    public ResponseResult<Page<ProductListVO>> homepageProducts(
             @ApiParam("分类ID") @RequestParam(required = false) Long categoryId,
             @ApiParam("搜索关键字") @RequestParam(required = false) String keyword,
             @ApiParam("页码") @RequestParam(defaultValue = "1") @Min(value = 1, message = "页码必须大于0") Long current,
@@ -90,7 +91,12 @@ public class ProductController extends BaseController {
         // 按创建时间倒序排列
         wrapper.orderByDesc(Product::getCreateTime);
         
-        return success(productService.page(getPage(current, size), wrapper));
+        Page<Product> productPage = productService.page(getPage(current, size), wrapper);
+        Page<ProductListVO> voPage = new Page<>(current, size, productPage.getTotal());
+        List<ProductListVO> voList = productService.convertToProductListVO(productPage.getRecords());
+        voPage.setRecords(voList);
+        
+        return success(voPage);
     }
 
     @ApiOperation("列表查询")
