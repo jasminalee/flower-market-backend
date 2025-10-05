@@ -4,11 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import vtc.xueqing.flower.entity.ShoppingCart;
 
-/**
- * 购物车表;(shopping_cart)表数据库访问层
- *
- * @author : Xueqing
- */
-@Mapper
+@Mapper // 标识为持久层 注入到spring容器中
 public interface ShoppingCartMapper extends BaseMapper<ShoppingCart> {
+
 }
