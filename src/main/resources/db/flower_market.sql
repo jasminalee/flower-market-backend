@@ -24,12 +24,12 @@ DROP TABLE IF EXISTS `comment`;
 CREATE TABLE `comment`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '评论ID',
   `source_id` bigint(0) NOT NULL COMMENT '来源ID（可以是产品ID、文章ID等）',
-  `source_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '来源类型（product, article, forum等）',
+  `source_type` varchar(50) CHARACTER SET utf8mb4  NOT NULL COMMENT '来源类型（product, article, forum等）',
   `user_id` bigint(0) NOT NULL COMMENT '用户ID（逻辑关联sys_user表）',
   `parent_id` bigint(0) NULL DEFAULT 0 COMMENT '父评论ID（用于构建评论树，0表示顶级评论）',
   `order_id` bigint(0) NULL DEFAULT NULL COMMENT '订单ID（逻辑关联order表，可为空，仅对产品评论有效）',
   `rating` tinyint(0) NULL DEFAULT NULL COMMENT '评分（1-5分，可为空）',
-  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '评论内容',
+  `content` text CHARACTER SET utf8mb4  NOT NULL COMMENT '评论内容',
   `is_anonymous` tinyint(0) NOT NULL DEFAULT 0 COMMENT '是否匿名（0-否，1-是）',
   `status` tinyint(0) NOT NULL DEFAULT 1 COMMENT '状态（0-隐藏，1-显示）',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
@@ -39,7 +39,7 @@ CREATE TABLE `comment`  (
   INDEX `idx_user_id`(`user_id`) USING BTREE,
   INDEX `idx_parent_id`(`parent_id`) USING BTREE,
   INDEX `idx_rating`(`rating`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '通用评论表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4  COMMENT = '通用评论表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of comment
@@ -67,7 +67,7 @@ CREATE TABLE `merchant_product`  (
   UNIQUE INDEX `uk_merchant_product_sku`(`merchant_id`, `product_id`, `sku_id`) USING BTREE,
   INDEX `idx_merchant_id`(`merchant_id`) USING BTREE,
   INDEX `idx_product_id`(`product_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '商户产品关联表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4  COMMENT = '商户产品关联表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of merchant_product
@@ -85,21 +85,21 @@ INSERT INTO `merchant_product` VALUES (11, 1, 5, 7, 28.00, 1, 1, '2025-09-29 14:
 DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '订单ID',
-  `order_no` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '订单编号',
+  `order_no` varchar(32) CHARACTER SET utf8mb4  NOT NULL COMMENT '订单编号',
   `user_id` bigint(0) NOT NULL COMMENT '用户ID（逻辑关联sys_user表）',
   `merchant_id` bigint(0) NOT NULL COMMENT '商户ID（逻辑关联sys_user表）',
   `total_amount` decimal(10, 2) NOT NULL COMMENT '订单总金额',
   `discount_amount` decimal(10, 2) NULL COMMENT '优惠金额',
   `pay_amount` decimal(10, 2) NOT NULL COMMENT '实际支付金额',
   `status` tinyint(0) NOT NULL DEFAULT 1 COMMENT '订单状态（1-待付款，2-已付款，3-已发货，4-已完成，5-已取消，6-退款中，7-已退款）',
-  `receiver_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '收货人姓名',
-  `receiver_phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '收货人电话',
-  `receiver_address` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '收货地址',
+  `receiver_name` varchar(50) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '收货人姓名',
+  `receiver_phone` varchar(20) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '收货人电话',
+  `receiver_address` varchar(200) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '收货地址',
   `payment_method` tinyint(0) NULL DEFAULT NULL COMMENT '支付方式（1-支付宝，2-微信，3-银行卡）',
   `payment_time` datetime(0) NULL DEFAULT NULL COMMENT '支付时间',
   `delivery_time` datetime(0) NULL DEFAULT NULL COMMENT '发货时间',
   `receive_time` datetime(0) NULL DEFAULT NULL COMMENT '收货时间',
-  `remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '订单备注',
+  `remark` varchar(200) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '订单备注',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
@@ -107,7 +107,7 @@ CREATE TABLE `order`  (
   INDEX `idx_user_id`(`user_id`) USING BTREE,
   INDEX `idx_merchant_id`(`merchant_id`) USING BTREE,
   INDEX `idx_status`(`status`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '订单表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4  COMMENT = '订单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of order
@@ -125,8 +125,8 @@ CREATE TABLE `order_item`  (
   `product_id` bigint(0) NOT NULL COMMENT '产品ID（逻辑关联product表）',
   `sku_id` bigint(0) NOT NULL COMMENT 'SKU ID（逻辑关联product_sku表）',
   `merchant_id` bigint(0) NOT NULL COMMENT '商户ID（逻辑关联sys_user表）',
-  `product_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '产品名称',
-  `sku_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'SKU名称',
+  `product_name` varchar(200) CHARACTER SET utf8mb4  NOT NULL COMMENT '产品名称',
+  `sku_name` varchar(200) CHARACTER SET utf8mb4  NOT NULL COMMENT 'SKU名称',
   `price` decimal(10, 2) NOT NULL COMMENT '单价',
   `quantity` int(0) NOT NULL COMMENT '数量',
   `total_price` decimal(10, 2) NOT NULL COMMENT '总价',
@@ -136,7 +136,7 @@ CREATE TABLE `order_item`  (
   INDEX `idx_order_id`(`order_id`) USING BTREE,
   INDEX `idx_product_id`(`product_id`) USING BTREE,
   INDEX `idx_sku_id`(`sku_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '订单明细表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4  COMMENT = '订单明细表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of order_item
@@ -151,14 +151,14 @@ INSERT INTO `order_item` VALUES (3, 2, 2, 3, 1, '白百合', '白百合-6支装'
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '产品ID',
-  `product_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '产品名称',
-  `product_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '产品编码',
+  `product_name` varchar(200) CHARACTER SET utf8mb4  NOT NULL COMMENT '产品名称',
+  `product_code` varchar(100) CHARACTER SET utf8mb4  NOT NULL COMMENT '产品编码',
   `category_id` bigint(0) NOT NULL COMMENT '分类ID（逻辑关联product_category表）',
-  `brand` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '品牌',
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '产品描述',
-  `main_image` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '主图URL',
-  `sub_images` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '子图URL集合，JSON格式存储',
-  `detail` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '产品详情',
+  `brand` varchar(100) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '品牌',
+  `description` text CHARACTER SET utf8mb4  NULL COMMENT '产品描述',
+  `main_image` varchar(500) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '主图URL',
+  `sub_images` text CHARACTER SET utf8mb4  NULL COMMENT '子图URL集合，JSON格式存储',
+  `detail` text CHARACTER SET utf8mb4  NULL COMMENT '产品详情',
   `product_type` tinyint(0) NOT NULL DEFAULT 1 COMMENT '产品类型（1-花卉，2-第三方产品）',
   `status` tinyint(0) NOT NULL DEFAULT 1 COMMENT '状态（0-下架，1-上架）',
   `avg_rating` decimal(3, 2) NULL COMMENT '平均评分',
@@ -172,7 +172,7 @@ CREATE TABLE `product`  (
   UNIQUE INDEX `uk_product_code`(`product_code`) USING BTREE,
   INDEX `idx_category_id`(`category_id`) USING BTREE,
   INDEX `idx_product_type`(`product_type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '产品信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4  COMMENT = '产品信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of product
@@ -189,7 +189,7 @@ INSERT INTO `product` VALUES (5, '有机肥料', 'FERT-001', 8, '绿色家园', 
 DROP TABLE IF EXISTS `product_category`;
 CREATE TABLE `product_category`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '分类ID',
-  `category_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '分类名称',
+  `category_name` varchar(100) CHARACTER SET utf8mb4  NOT NULL COMMENT '分类名称',
   `parent_id` bigint(0) NULL DEFAULT 0 COMMENT '父分类ID（用于构建分类树）',
   `category_level` tinyint(0) NOT NULL DEFAULT 1 COMMENT '分类级别（1-一级分类，2-二级分类，3-三级分类）',
   `sort` int(0) NULL DEFAULT 0 COMMENT '排序号',
@@ -197,7 +197,7 @@ CREATE TABLE `product_category`  (
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '产品分类表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4  COMMENT = '产品分类表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of product_category
@@ -220,18 +220,18 @@ DROP TABLE IF EXISTS `product_sku`;
 CREATE TABLE `product_sku`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT 'SKU ID',
   `product_id` bigint(0) NOT NULL COMMENT '产品ID（逻辑关联product表）',
-  `sku_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'SKU名称（如：红色-L）',
-  `sku_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'SKU编码',
+  `sku_name` varchar(200) CHARACTER SET utf8mb4  NOT NULL COMMENT 'SKU名称（如：红色-L）',
+  `sku_code` varchar(100) CHARACTER SET utf8mb4  NOT NULL COMMENT 'SKU编码',
   `price` decimal(10, 2) NOT NULL COMMENT '价格',
   `stock` int(0) NOT NULL DEFAULT 0 COMMENT '库存数量',
-  `specifications` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '规格描述，JSON格式存储',
+  `specifications` varchar(500) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '规格描述，JSON格式存储',
   `status` tinyint(0) NOT NULL DEFAULT 1 COMMENT '状态（0-无效，1-有效）',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_sku_code`(`sku_code`) USING BTREE,
   INDEX `idx_product_id`(`product_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '产品SKU表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4  COMMENT = '产品SKU表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of product_sku
@@ -261,7 +261,7 @@ CREATE TABLE `shopping_cart`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_user_product_sku`(`user_id`, `product_id`, `sku_id`) USING BTREE,
   INDEX `idx_user_id`(`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '购物车表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4  COMMENT = '购物车表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of shopping_cart
@@ -276,17 +276,17 @@ DROP TABLE IF EXISTS `sys_permission`;
 CREATE TABLE `sys_permission`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '权限ID',
   `parent_id` bigint(0) NULL DEFAULT 0 COMMENT '父权限ID（用于构建权限树）',
-  `permission_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '权限名称',
-  `permission_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '权限编码',
+  `permission_name` varchar(100) CHARACTER SET utf8mb4  NOT NULL COMMENT '权限名称',
+  `permission_code` varchar(100) CHARACTER SET utf8mb4  NOT NULL COMMENT '权限编码',
   `permission_type` tinyint(0) NOT NULL COMMENT '权限类型（1-菜单，2-按钮，3-接口）',
-  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '资源路径（如URL）',
-  `method` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '请求方法（GET/POST等，适用于接口权限）',
+  `url` varchar(255) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '资源路径（如URL）',
+  `method` varchar(10) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '请求方法（GET/POST等，适用于接口权限）',
   `sort` int(0) NULL DEFAULT 0 COMMENT '排序号',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_permission_code`(`permission_code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4  COMMENT = '系统权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_permission
@@ -311,14 +311,14 @@ INSERT INTO `sys_permission` VALUES (13, 12, '商户仪表板', 'test', 1, '', '
 DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE `sys_role`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '角色ID',
-  `role_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '角色名称',
-  `role_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '角色编码',
-  `description` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '角色描述',
+  `role_name` varchar(50) CHARACTER SET utf8mb4  NOT NULL COMMENT '角色名称',
+  `role_code` varchar(50) CHARACTER SET utf8mb4  NOT NULL COMMENT '角色编码',
+  `description` varchar(200) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '角色描述',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_role_code`(`role_code`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统角色表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4  COMMENT = '系统角色表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role
@@ -340,7 +340,7 @@ CREATE TABLE `sys_role_permission`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_role_permission`(`role_id`, `permission_id`) USING BTREE,
   INDEX `idx_permission_id`(`permission_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '角色权限关联表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4  COMMENT = '角色权限关联表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role_permission
@@ -367,18 +367,18 @@ INSERT INTO `sys_role_permission` VALUES (15, 3, 8, '2025-09-29 13:17:22');
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
-  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户名(登陆)',
-  `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '密码(加密存储)',
-  `nickname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '昵称',
-  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '邮箱',
-  `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '手机号',
-  `addr` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '地址',
+  `username` varchar(50) CHARACTER SET utf8mb4  NOT NULL COMMENT '用户名(登陆)',
+  `password` varchar(100) CHARACTER SET utf8mb4  NOT NULL COMMENT '密码(加密存储)',
+  `nickname` varchar(50) CHARACTER SET utf8mb4  NOT NULL COMMENT '昵称',
+  `email` varchar(100) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '邮箱',
+  `phone` varchar(20) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '手机号',
+  `addr` varchar(255) CHARACTER SET utf8mb4  NOT NULL COMMENT '地址',
   `status` tinyint(0) NOT NULL DEFAULT 1 COMMENT '状态（0-禁用，1-正常）',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_username`(`username`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4  COMMENT = '系统用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
@@ -399,7 +399,7 @@ CREATE TABLE `sys_user_role`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uk_user_role`(`user_id`, `role_id`) USING BTREE,
   INDEX `idx_role_id`(`role_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户角色关联表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4  COMMENT = '用户角色关联表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user_role
