@@ -17,7 +17,7 @@ import javax.validation.constraints.Min;
 import java.util.Collections;
 import java.util.List;
 
-@Api(tags = "购物车对象功能接口")
+// @Api(tags = "购物车对象功能接口")
 @RestController
 @RequestMapping("/shoppingCart")
 public class ShoppingCartController extends BaseController {

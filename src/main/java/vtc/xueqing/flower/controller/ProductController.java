@@ -28,7 +28,7 @@ import java.util.List;
  * 产品信息表;(product)表控制层
  * @author : Xueqing
  */
-@Api(tags = "产品信息表对象功能接口")
+// @Api(tags = "产品信息表对象功能接口")
 @Validated
 @RestController
 @RequestMapping("/product")

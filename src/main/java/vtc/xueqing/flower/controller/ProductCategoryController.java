@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * 产品分类表;(product_category)表控制层
  * @author : Xueqing
  */
-@Api(tags = "产品分类表对象功能接口")
+// @Api(tags = "产品分类表对象功能接口")
 @RestController
 @RequestMapping("/productCategory")
 public class ProductCategoryController extends BaseController {

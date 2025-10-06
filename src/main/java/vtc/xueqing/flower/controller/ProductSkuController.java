@@ -20,7 +20,7 @@ import java.util.List;
  * 产品SKU表;(product_sku)表控制层
  * @author : Xueqing
  */
-@Api(tags = "产品SKU表对象功能接口")
+// @Api(tags = "产品SKU表对象功能接口")
 @RestController
 @RequestMapping("/productSku")
 public class ProductSkuController extends BaseController {
