@@ -23,7 +23,7 @@ public class AuthController extends BaseController {
 
     @ApiOperation("用户登录")
     @PostMapping("/login") // @RequestBody 接收一个json
-    public ResponseResult login(@RequestBody SysUser loginRequest) {
+    public ResponseResult<SysUser> login(@RequestBody SysUser loginRequest) {
         // 根据用户名查找用户
         SysUser sysUser = sysUserService.getOne(
             new LambdaQueryWrapper<>(loginRequest)
@@ -31,11 +31,11 @@ public class AuthController extends BaseController {
 
         // 检查用户是否存在
         if (sysUser == null)
-            return fail("用户名或者密码错误！");
+            return fail("用户名或者密码错误！", sysUser);
 
         // 检查用户状态
         if (sysUser.getStatus() != null && sysUser.getStatus() == 0)
-            return fail("用户已被禁用");
-        return success("登录成功");
+            return fail("用户已被禁用", sysUser);
+        return success("登陆成功", sysUser);
     }
 }

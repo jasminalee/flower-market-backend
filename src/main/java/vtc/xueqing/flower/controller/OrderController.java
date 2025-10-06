@@ -15,6 +15,7 @@ import vtc.xueqing.flower.service.OrderService;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -48,7 +49,14 @@ public class OrderController extends BaseController {
                                                     @RequestParam(defaultValue = "10") 
                                                     @Min(value = 1, message = "每页数量必须大于0") Long size){
         LambdaQueryWrapper<Order> wrapper = new LambdaQueryWrapper<>(order);
-        return success(orderService.page(getPage(current, size), wrapper));
+        Page<Order> pageResult = orderService.page(getPage(current, size), wrapper);
+        
+        // 处理空数据情况，确保返回空数组而不是null
+        if (pageResult.getRecords() == null || pageResult.getRecords().isEmpty()) {
+            pageResult.setRecords(Collections.emptyList());
+        }
+        
+        return success(pageResult);
     }
 
     @ApiOperation("列表查询")

@@ -14,6 +14,7 @@ import vtc.xueqing.flower.service.ShoppingCartService;
 import vtc.xueqing.flower.vo.ShoppingCartVO;
 
 import javax.validation.constraints.Min;
+import java.util.Collections;
 import java.util.List;
 
 @Api(tags = "购物车对象功能接口")
@@ -47,6 +48,12 @@ public class ShoppingCartController extends BaseController {
                                                     @RequestParam(defaultValue = "10") 
                                                     @Min(value = 1, message = "每页数量必须大于0") Long size){
         Page<ShoppingCartVO> page = shoppingCartService.pageShoppingCartWithProductInfo(current, size, shoppingCart);
+        
+        // 处理空数据情况，确保返回空数组而不是null
+        if (page.getRecords() == null || page.getRecords().isEmpty()) {
+            page.setRecords(Collections.emptyList());
+        }
+        
         return success(page);
     }
 
@@ -55,5 +62,11 @@ public class ShoppingCartController extends BaseController {
     public ResponseResult<ShoppingCart> addProductToCart(@RequestBody ShoppingCart shoppingCart) {
         ShoppingCart cart = shoppingCartService.addProductToCart(shoppingCart);
         return success(cart);
+    }
+    @ApiOperation("删除购物车信息根据id")
+    @DeleteMapping("{id}")
+    public ResponseResult removeById(@PathVariable Long id) {
+        boolean b = shoppingCartService.removeById(id);
+        return b ? success() : fail();
     }
 }

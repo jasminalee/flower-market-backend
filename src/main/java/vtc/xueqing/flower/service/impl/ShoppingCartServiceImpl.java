@@ -19,6 +19,7 @@ import vtc.xueqing.flower.vo.ShoppingCartVO;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -59,9 +60,9 @@ public class ShoppingCartServiceImpl extends ServiceImpl<ShoppingCartMapper, Sho
                 .collect(Collectors.toList());
         
         // 批量查询产品、SKU和商户信息
-        List<Product> products = productMapper.selectBatchIds(productIds);
-        List<ProductSku> productSkus = productSkuMapper.selectBatchIds(skuIds);
-        List<SysUser> merchants = sysUserMapper.selectBatchIds(merchantIds);
+        List<Product> products = productIds.isEmpty() ? Collections.emptyList() : productMapper.selectBatchIds(productIds);
+        List<ProductSku> productSkus = skuIds.isEmpty() ? Collections.emptyList() : productSkuMapper.selectBatchIds(skuIds);
+        List<SysUser> merchants = merchantIds.isEmpty() ? Collections.emptyList() : sysUserMapper.selectBatchIds(merchantIds);
         
         // 转换为Map便于查找
         Map<Long, Product> productMap = products.stream()
@@ -128,9 +129,9 @@ public class ShoppingCartServiceImpl extends ServiceImpl<ShoppingCartMapper, Sho
                 .collect(Collectors.toList());
         
         // 批量查询产品、SKU和商户信息
-        List<Product> products = productMapper.selectBatchIds(productIds);
-        List<ProductSku> productSkus = productSkuMapper.selectBatchIds(skuIds);
-        List<SysUser> merchants = sysUserMapper.selectBatchIds(merchantIds);
+        List<Product> products = productIds.isEmpty() ? Collections.emptyList() : productMapper.selectBatchIds(productIds);
+        List<ProductSku> productSkus = skuIds.isEmpty() ? Collections.emptyList() : productSkuMapper.selectBatchIds(skuIds);
+        List<SysUser> merchants = merchantIds.isEmpty() ? Collections.emptyList() : sysUserMapper.selectBatchIds(merchantIds);
         
         // 转换为Map便于查找
         Map<Long, Product> productMap = products.stream()

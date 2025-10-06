@@ -13,6 +13,7 @@ import vtc.xueqing.flower.config.BaseController;
 import vtc.xueqing.flower.entity.ProductSku;
 import vtc.xueqing.flower.service.ProductSkuService;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -38,7 +39,14 @@ public class ProductSkuController extends BaseController {
                                                     @RequestParam(defaultValue = "1") Long current, 
                                                     @RequestParam(defaultValue = "10") Long size){
         LambdaQueryWrapper<ProductSku> wrapper = new LambdaQueryWrapper<>(productSku);
-        return success(productSkuService.page(getPage(current, size), wrapper));
+        Page<ProductSku> pageResult = productSkuService.page(getPage(current, size), wrapper);
+        
+        // 处理空数据情况，确保返回空数组而不是null
+        if (pageResult.getRecords() == null || pageResult.getRecords().isEmpty()) {
+            pageResult.setRecords(Collections.emptyList());
+        }
+        
+        return success(pageResult);
     }
 
     @ApiOperation("根据产品ID查询SKU列表")

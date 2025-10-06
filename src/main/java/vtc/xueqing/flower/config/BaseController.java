@@ -69,9 +69,6 @@ public class BaseController {
      * @param message 错误信息
      * @return ResponseResult<Void>
      */
-    // protected ResponseResult<Void> fail(String message) {
-    //     return ResponseResult.fail(message);
-    // }
     protected ResponseResult<String> fail(String message) {
         return ResponseResult.fail(message);
     }
@@ -83,6 +80,10 @@ public class BaseController {
      * @return ResponseResult<T>
      */
     protected <T> ResponseResult<T> fail(T obj) {
+        return ResponseResult.fail(obj);
+    }
+
+    protected <T> ResponseResult<T> fail(String message, T obj) {
         return ResponseResult.fail(obj);
     }
 

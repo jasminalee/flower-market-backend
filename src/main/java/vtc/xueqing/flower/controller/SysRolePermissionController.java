@@ -11,6 +11,7 @@ import vtc.xueqing.flower.service.SysRolePermissionService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import vtc.xueqing.flower.config.BaseController;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,7 +35,14 @@ public class SysRolePermissionController extends BaseController {
                                                     @RequestParam(defaultValue = "1") Long current, 
                                                     @RequestParam(defaultValue = "10") Long size){
         LambdaQueryWrapper<SysRolePermission> wrapper = new LambdaQueryWrapper<>();
-        return success(sysRolePermissionService.page(getPage(current, size), wrapper));
+        Page<SysRolePermission> pageResult = sysRolePermissionService.page(getPage(current, size), wrapper);
+        
+        // 处理空数据情况，确保返回空数组而不是null
+        if (pageResult.getRecords() == null || pageResult.getRecords().isEmpty()) {
+            pageResult.setRecords(Collections.emptyList());
+        }
+        
+        return success(pageResult);
     }
     @ApiOperation("列表查询")
     @GetMapping("/list")

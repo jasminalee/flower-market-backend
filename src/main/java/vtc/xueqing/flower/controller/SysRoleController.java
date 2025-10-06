@@ -12,6 +12,7 @@ import vtc.xueqing.flower.service.SysRoleService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import vtc.xueqing.flower.common.ResponseResult;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,7 +41,15 @@ public class SysRoleController extends BaseController {
                 .like(StrUtil.isNotBlank(keywords), SysRole::getRoleCode, keywords)
                 .or()
                 .like(StrUtil.isNotBlank(keywords), SysRole::getDescription, keywords);
-        return success(sysRoleService.page(getPage(current, size), wrapper));
+        
+        Page<SysRole> pageResult = sysRoleService.page(getPage(current, size), wrapper);
+        
+        // 处理空数据情况，确保返回空数组而不是null
+        if (pageResult.getRecords() == null || pageResult.getRecords().isEmpty()) {
+            pageResult.setRecords(Collections.emptyList());
+        }
+        
+        return success(pageResult);
     }
     @ApiOperation("列表查询")
     @GetMapping("/list")

@@ -17,6 +17,7 @@ import vtc.xueqing.flower.service.ProductService;
 import vtc.xueqing.flower.service.ProductSkuService;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -147,6 +148,13 @@ public class MerchantController extends BaseController {
             @RequestParam(defaultValue = "10") Long size) {
         LambdaQueryWrapper<MerchantProduct> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(MerchantProduct::getMerchantId, merchantId);
-        return success(merchantProductService.page(getPage(current, size), wrapper));
+        Page<MerchantProduct> pageResult = merchantProductService.page(getPage(current, size), wrapper);
+        
+        // 处理空数据情况，确保返回空数组而不是null
+        if (pageResult.getRecords() == null || pageResult.getRecords().isEmpty()) {
+            pageResult.setRecords(Collections.emptyList());
+        }
+        
+        return success(pageResult);
     }
 }

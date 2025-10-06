@@ -1,5 +1,6 @@
 
 package vtc.xueqing.flower.controller;
+import java.util.Collections;
 import java.util.List;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.Api;
@@ -32,7 +33,14 @@ public class SysPermissionController extends BaseController {
                                                     @RequestParam(defaultValue = "1") Long current, 
                                                     @RequestParam(defaultValue = "10") Long size){
         LambdaQueryWrapper<SysPermission> wrapper = new LambdaQueryWrapper<>(sysPermission);
-        return success(sysPermissionService.page(getPage(current, size), wrapper));
+        Page<SysPermission> pageResult = sysPermissionService.page(getPage(current, size), wrapper);
+        
+        // 处理空数据情况，确保返回空数组而不是null
+        if (pageResult.getRecords() == null || pageResult.getRecords().isEmpty()) {
+            pageResult.setRecords(Collections.emptyList());
+        }
+        
+        return success(pageResult);
     }
     @ApiOperation("列表查询")
     @GetMapping("/list")

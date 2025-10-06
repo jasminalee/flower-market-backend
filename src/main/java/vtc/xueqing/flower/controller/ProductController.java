@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -58,7 +59,14 @@ public class ProductController extends BaseController {
                                                     @RequestParam(defaultValue = "10") 
                                                     @Min(value = 1, message = "每页数量必须大于0") Long size){
         LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>(product);
-        return success(productService.page(getPage(current, size), wrapper));
+        Page<Product> productPage = productService.page(getPage(current, size), wrapper);
+        
+        // 处理空数据情况，确保返回空数组而不是null
+        if (productPage.getRecords() == null || productPage.getRecords().isEmpty()) {
+            productPage.setRecords(Collections.emptyList());
+        }
+        
+        return success(productPage);
     }
     
     @ApiOperation("主页商品列表（支持分类和搜索）")

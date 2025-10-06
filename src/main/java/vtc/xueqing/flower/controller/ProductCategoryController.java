@@ -15,6 +15,7 @@ import vtc.xueqing.flower.vo.ProductCategoryTreeVO;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,7 +50,14 @@ public class ProductCategoryController extends BaseController {
                                                     @RequestParam(defaultValue = "10") 
                                                     @Min(value = 1, message = "每页数量必须大于0") Long size){
         LambdaQueryWrapper<ProductCategory> wrapper = new LambdaQueryWrapper<>(productCategory);
-        return success(productCategoryService.page(getPage(current, size), wrapper));
+        Page<ProductCategory> pageResult = productCategoryService.page(getPage(current, size), wrapper);
+        
+        // 处理空数据情况，确保返回空数组而不是null
+        if (pageResult.getRecords() == null || pageResult.getRecords().isEmpty()) {
+            pageResult.setRecords(Collections.emptyList());
+        }
+        
+        return success(pageResult);
     }
     
     @ApiOperation("获取主页用的分类列表（只包含启用的一级分类）")
