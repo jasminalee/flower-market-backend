@@ -93,6 +93,7 @@ public class MerchantController extends BaseController {
             existing.setPrice(merchantProduct.getPrice())
                     .setStock(merchantProduct.getStock())
                     .setStatus(1); // 设置为上架状态
+            merchantProductService.updateById(existing);
             return success();
         } else {
             // 如果不存在，新增上架记录
