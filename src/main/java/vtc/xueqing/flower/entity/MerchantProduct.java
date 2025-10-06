@@ -41,8 +41,35 @@ public class MerchantProduct implements Serializable, Cloneable {
     @ApiModelProperty("商户定价")
     private BigDecimal price;
 
+    @ApiModelProperty("品牌")
+    private String brand;
+
+    @ApiModelProperty("产品描述")
+    private String description;
+
+    @ApiModelProperty("子图URL集合，JSON格式存储")
+    private String subImages;
+
+    @ApiModelProperty("产品详情")
+    private String detail;
+
     @ApiModelProperty("商户库存")
     private Integer stock;
+
+    @ApiModelProperty("平均评分")
+    private BigDecimal avgRating;
+
+    @ApiModelProperty("总销量")
+    private Integer totalSales;
+
+    @ApiModelProperty("最低价格")
+    private BigDecimal minPrice;
+
+    @ApiModelProperty("是否热销(1:是,0:否)")
+    private Integer isHot;
+
+    @ApiModelProperty("是否打折(1:是,0:否)")
+    private Integer isDiscounted;
 
     @ApiModelProperty("状态（0-下架，1-上架）")
     private Integer status;

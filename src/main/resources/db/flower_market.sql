@@ -59,7 +59,16 @@ CREATE TABLE `merchant_product`  (
   `product_id` bigint(0) NOT NULL COMMENT '产品ID（逻辑关联product表）',
   `sku_id` bigint(0) NOT NULL COMMENT 'SKU ID（逻辑关联product_sku表）',
   `price` decimal(10, 2) NOT NULL COMMENT '商户定价',
+  `brand` varchar(100) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '品牌',
+  `description` text CHARACTER SET utf8mb4  NULL COMMENT '产品描述',
+  `sub_images` text CHARACTER SET utf8mb4  NULL COMMENT '子图URL集合，JSON格式存储',
+  `detail` text CHARACTER SET utf8mb4  NULL COMMENT '产品详情',
   `stock` int(0) NOT NULL DEFAULT 0 COMMENT '商户库存',
+  `avg_rating` decimal(3, 2) NULL COMMENT '平均评分',
+  `total_sales` int(0) NULL DEFAULT 0 COMMENT '总销量',
+  `min_price` decimal(10, 2) NULL COMMENT '最低价格',
+  `is_hot` tinyint(1) NULL DEFAULT 0 COMMENT '是否热销(1:是,0:否)',
+  `is_discounted` tinyint(1) NULL DEFAULT 0 COMMENT '是否打折(1:是,0:否)',
   `status` tinyint(0) NOT NULL DEFAULT 1 COMMENT '状态（0-下架，1-上架）',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
@@ -72,12 +81,12 @@ CREATE TABLE `merchant_product`  (
 -- ----------------------------
 -- Records of merchant_product
 -- ----------------------------
-INSERT INTO `merchant_product` VALUES (1, 1, 1, 1, 109.00, 20, 1, '2025-09-29 13:17:22', '2025-09-29 13:17:22');
-INSERT INTO `merchant_product` VALUES (2, 1, 1, 2, 178.00, 10, 1, '2025-09-29 13:17:22', '2025-09-29 13:17:22');
-INSERT INTO `merchant_product` VALUES (3, 1, 3, 5, 50.00, 5, 1, '2025-09-29 13:17:22', '2025-09-29 13:17:22');
-INSERT INTO `merchant_product` VALUES (4, 1, 2, 3, 85.00, 15, 1, '2025-09-29 13:17:22', '2025-09-29 13:17:22');
-INSERT INTO `merchant_product` VALUES (5, 1, 4, 6, 42.00, 8, 1, '2025-09-29 13:17:22', '2025-09-29 13:17:22');
-INSERT INTO `merchant_product` VALUES (11, 1, 5, 7, 28.00, 1, 1, '2025-09-29 14:49:12', '2025-09-29 14:49:12');
+INSERT INTO `merchant_product` VALUES (1, 1, 1, 1, 109.00, NULL, NULL, NULL, NULL, 20, NULL, NULL, NULL, NULL, NULL, 1, '2025-09-29 13:17:22', '2025-09-29 13:17:22');
+INSERT INTO `merchant_product` VALUES (2, 1, 1, 2, 178.00, NULL, NULL, NULL, NULL, 10, NULL, NULL, NULL, NULL, NULL, 1, '2025-09-29 13:17:22', '2025-09-29 13:17:22');
+INSERT INTO `merchant_product` VALUES (3, 1, 3, 5, 50.00, NULL, NULL, NULL, NULL, 5, NULL, NULL, NULL, NULL, NULL, 1, '2025-09-29 13:17:22', '2025-09-29 13:17:22');
+INSERT INTO `merchant_product` VALUES (4, 1, 2, 3, 85.00, NULL, NULL, NULL, NULL, 15, NULL, NULL, NULL, NULL, NULL, 1, '2025-09-29 13:17:22', '2025-09-29 13:17:22');
+INSERT INTO `merchant_product` VALUES (5, 1, 4, 6, 42.00, NULL, NULL, NULL, NULL, 8, NULL, NULL, NULL, NULL, NULL, 1, '2025-09-29 13:17:22', '2025-09-29 13:17:22');
+INSERT INTO `merchant_product` VALUES (11, 1, 5, 7, 28.00, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, 1, '2025-09-29 14:49:12', '2025-09-29 14:49:12');
 
 -- ----------------------------
 -- Table structure for order
@@ -154,18 +163,9 @@ CREATE TABLE `product`  (
   `product_name` varchar(200) CHARACTER SET utf8mb4  NOT NULL COMMENT '产品名称',
   `product_code` varchar(100) CHARACTER SET utf8mb4  NOT NULL COMMENT '产品编码',
   `category_id` bigint(0) NOT NULL COMMENT '分类ID（逻辑关联product_category表）',
-  `brand` varchar(100) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '品牌',
-  `description` text CHARACTER SET utf8mb4  NULL COMMENT '产品描述',
   `main_image` varchar(500) CHARACTER SET utf8mb4  NULL DEFAULT NULL COMMENT '主图URL',
-  `sub_images` text CHARACTER SET utf8mb4  NULL COMMENT '子图URL集合，JSON格式存储',
-  `detail` text CHARACTER SET utf8mb4  NULL COMMENT '产品详情',
   `product_type` tinyint(0) NOT NULL DEFAULT 1 COMMENT '产品类型（1-花卉，2-第三方产品）',
   `status` tinyint(0) NOT NULL DEFAULT 1 COMMENT '状态（0-下架，1-上架）',
-  `avg_rating` decimal(3, 2) NULL COMMENT '平均评分',
-  `total_sales` int(0) NULL DEFAULT 0 COMMENT '总销量',
-  `min_price` decimal(10, 2) NULL COMMENT '最低价格',
-  `is_hot` tinyint(1) NULL DEFAULT 0 COMMENT '是否热销(1:是,0:否)',
-  `is_discounted` tinyint(1) NULL DEFAULT 0 COMMENT '是否打折(1:是,0:否)',
   `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,

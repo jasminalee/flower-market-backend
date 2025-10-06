@@ -108,7 +108,16 @@ public class MerchantProductController extends BaseController {
             vo.setProductId(merchantProduct.getProductId());
             vo.setSkuId(merchantProduct.getSkuId());
             vo.setPrice(merchantProduct.getPrice());
+            vo.setBrand(merchantProduct.getBrand());
+            vo.setDescription(merchantProduct.getDescription());
+            vo.setSubImages(merchantProduct.getSubImages());
+            vo.setDetail(merchantProduct.getDetail());
             vo.setStock(merchantProduct.getStock());
+            vo.setAvgRating(merchantProduct.getAvgRating());
+            vo.setTotalSales(merchantProduct.getTotalSales());
+            vo.setMinPrice(merchantProduct.getMinPrice());
+            vo.setIsHot(merchantProduct.getIsHot());
+            vo.setIsDiscounted(merchantProduct.getIsDiscounted());
             vo.setStatus(merchantProduct.getStatus());
             vo.setCreateTime(merchantProduct.getCreateTime());
             vo.setUpdateTime(merchantProduct.getUpdateTime());
@@ -161,7 +170,16 @@ public class MerchantProductController extends BaseController {
             vo.setProductId(merchantProduct.getProductId());
             vo.setSkuId(merchantProduct.getSkuId());
             vo.setPrice(merchantProduct.getPrice());
+            vo.setBrand(merchantProduct.getBrand());
+            vo.setDescription(merchantProduct.getDescription());
+            vo.setSubImages(merchantProduct.getSubImages());
+            vo.setDetail(merchantProduct.getDetail());
             vo.setStock(merchantProduct.getStock());
+            vo.setAvgRating(merchantProduct.getAvgRating());
+            vo.setTotalSales(merchantProduct.getTotalSales());
+            vo.setMinPrice(merchantProduct.getMinPrice());
+            vo.setIsHot(merchantProduct.getIsHot());
+            vo.setIsDiscounted(merchantProduct.getIsDiscounted());
             vo.setStatus(merchantProduct.getStatus());
 
             // 获取商户信息
