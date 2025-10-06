@@ -63,6 +63,12 @@ public class ShoppingCartController extends BaseController {
         ShoppingCart cart = shoppingCartService.addProductToCart(shoppingCart);
         return success(cart);
     }
+    @ApiOperation("购物车编辑-或者新增接口")
+    @PutMapping
+    public ResponseResult saveOrUpdate(@RequestBody ShoppingCart shoppingCart) {
+        shoppingCartService.saveOrUpdate(shoppingCart);
+        return success();
+    }
     @ApiOperation("删除购物车信息根据id")
     @DeleteMapping("{id}")
     public ResponseResult removeById(@PathVariable Long id) {

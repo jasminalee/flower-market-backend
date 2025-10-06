@@ -6,14 +6,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vtc.xueqing.flower.entity.Product;
-import vtc.xueqing.flower.entity.ProductSku;
-import vtc.xueqing.flower.entity.ShoppingCart;
-import vtc.xueqing.flower.entity.SysUser;
-import vtc.xueqing.flower.mapper.ProductMapper;
+import vtc.xueqing.flower.entity.*;
 import vtc.xueqing.flower.mapper.ProductSkuMapper;
 import vtc.xueqing.flower.mapper.ShoppingCartMapper;
 import vtc.xueqing.flower.mapper.SysUserMapper;
+import vtc.xueqing.flower.service.MerchantProductService;
 import vtc.xueqing.flower.service.ShoppingCartService;
 import vtc.xueqing.flower.vo.ShoppingCartVO;
 
@@ -28,7 +25,7 @@ import java.util.stream.Collectors;
 public class ShoppingCartServiceImpl extends ServiceImpl<ShoppingCartMapper, ShoppingCart> implements ShoppingCartService {
     
     @Autowired
-    private ProductMapper productMapper;
+    private MerchantProductService merchantProductService;
     
     @Autowired
     private ProductSkuMapper productSkuMapper;
@@ -45,7 +42,7 @@ public class ShoppingCartServiceImpl extends ServiceImpl<ShoppingCartMapper, Sho
         
         // 获取所有相关的产品ID和SKU ID
         List<Long> productIds = shoppingCarts.stream()
-                .map(ShoppingCart::getProductId)
+                .map(ShoppingCart::getMerchantProductId)
                 .distinct()
                 .collect(Collectors.toList());
         
@@ -60,13 +57,13 @@ public class ShoppingCartServiceImpl extends ServiceImpl<ShoppingCartMapper, Sho
                 .collect(Collectors.toList());
         
         // 批量查询产品、SKU和商户信息
-        List<Product> products = productIds.isEmpty() ? Collections.emptyList() : productMapper.selectBatchIds(productIds);
+        List<MerchantProduct> merchantProducts = productIds.isEmpty() ? Collections.emptyList() : merchantProductService.listByIds(productIds);
         List<ProductSku> productSkus = skuIds.isEmpty() ? Collections.emptyList() : productSkuMapper.selectBatchIds(skuIds);
         List<SysUser> merchants = merchantIds.isEmpty() ? Collections.emptyList() : sysUserMapper.selectBatchIds(merchantIds);
         
         // 转换为Map便于查找
-        Map<Long, Product> productMap = products.stream()
-                .collect(Collectors.toMap(Product::getId, product -> product));
+        Map<Long, MerchantProduct> productMap = merchantProducts.stream()
+                .collect(Collectors.toMap(MerchantProduct::getId, product -> product));
         
         Map<Long, ProductSku> skuMap = productSkus.stream()
                 .collect(Collectors.toMap(ProductSku::getId, sku -> sku));
@@ -81,9 +78,9 @@ public class ShoppingCartServiceImpl extends ServiceImpl<ShoppingCartMapper, Sho
             BeanUtils.copyProperties(cart, vo);
             
             // 设置产品名称
-            Product product = productMap.get(cart.getProductId());
+            MerchantProduct product = productMap.get(cart.getMerchantProductId());
             if (product != null) {
-                vo.setProductName(product.getProductName());
+                vo.setProductName(product.getMerchantName());
                 vo.setMainImage(product.getMainImage());
             }
             
@@ -114,7 +111,7 @@ public class ShoppingCartServiceImpl extends ServiceImpl<ShoppingCartMapper, Sho
         
         // 获取所有相关的产品ID和SKU ID
         List<Long> productIds = shoppingCartPage.getRecords().stream()
-                .map(ShoppingCart::getProductId)
+                .map(ShoppingCart::getMerchantProductId)
                 .distinct()
                 .collect(Collectors.toList());
         
@@ -129,13 +126,13 @@ public class ShoppingCartServiceImpl extends ServiceImpl<ShoppingCartMapper, Sho
                 .collect(Collectors.toList());
         
         // 批量查询产品、SKU和商户信息
-        List<Product> products = productIds.isEmpty() ? Collections.emptyList() : productMapper.selectBatchIds(productIds);
+        List<MerchantProduct> products = productIds.isEmpty() ? Collections.emptyList() : merchantProductService.listByIds(productIds);
         List<ProductSku> productSkus = skuIds.isEmpty() ? Collections.emptyList() : productSkuMapper.selectBatchIds(skuIds);
         List<SysUser> merchants = merchantIds.isEmpty() ? Collections.emptyList() : sysUserMapper.selectBatchIds(merchantIds);
         
         // 转换为Map便于查找
-        Map<Long, Product> productMap = products.stream()
-                .collect(Collectors.toMap(Product::getId, product -> product));
+        Map<Long, MerchantProduct> productMap = products.stream()
+                .collect(Collectors.toMap(MerchantProduct::getId, product -> product));
         
         Map<Long, ProductSku> skuMap = productSkus.stream()
                 .collect(Collectors.toMap(ProductSku::getId, sku -> sku));
@@ -150,9 +147,9 @@ public class ShoppingCartServiceImpl extends ServiceImpl<ShoppingCartMapper, Sho
             BeanUtils.copyProperties(cart, vo);
             
             // 设置产品名称
-            Product product = productMap.get(cart.getProductId());
+            MerchantProduct product = productMap.get(cart.getMerchantProductId());
             if (product != null) {
-                vo.setProductName(product.getProductName());
+                vo.setProductName(product.getMerchantName());
                 vo.setMainImage(product.getMainImage());
             }
             
@@ -184,7 +181,7 @@ public class ShoppingCartServiceImpl extends ServiceImpl<ShoppingCartMapper, Sho
         ShoppingCart existingCart = this.lambdaQuery()
                 .eq(ShoppingCart::getUserId, shoppingCart.getUserId())
                 .eq(ShoppingCart::getMerchantId, shoppingCart.getMerchantId())
-                .eq(ShoppingCart::getProductId, shoppingCart.getProductId())
+                .eq(ShoppingCart::getMerchantProductId, shoppingCart.getMerchantProductId())
                 .eq(ShoppingCart::getSkuId, shoppingCart.getSkuId())
                 .one();
         

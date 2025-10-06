@@ -259,7 +259,7 @@ DROP TABLE IF EXISTS `shopping_cart`;
 CREATE TABLE `shopping_cart` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '购物车项ID',
   `user_id` bigint NOT NULL COMMENT '用户ID（逻辑关联sys_user表）',
-  `product_id` bigint NOT NULL COMMENT '产品ID（逻辑关联product表）',
+  `merchant_product_id` bigint NOT NULL COMMENT '商品品ID（逻辑关联merchant_product表）',
   `sku_id` bigint NOT NULL COMMENT 'SKU ID（逻辑关联product_sku表）',
   `merchant_id` bigint NOT NULL COMMENT '商户ID（逻辑关联sys_user表）',
   `quantity` int NOT NULL DEFAULT '1' COMMENT '数量',
@@ -269,7 +269,7 @@ CREATE TABLE `shopping_cart` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `idx_user_id` (`user_id`),
-  KEY `idx_product_id` (`product_id`),
+  KEY `idx_merchant_product_id` (`merchant_product_id`),
   KEY `idx_sku_id` (`sku_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='购物车表';
 /*!40101 SET character_set_client = @saved_cs_client */;

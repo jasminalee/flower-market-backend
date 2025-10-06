@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import vtc.xueqing.flower.common.ResponseResult;
 import vtc.xueqing.flower.config.BaseController;
 import vtc.xueqing.flower.entity.Order;
+import vtc.xueqing.flower.entity.ShoppingCart;
 import vtc.xueqing.flower.service.OrderService;
+import vtc.xueqing.flower.service.ShoppingCartService;
+import vtc.xueqing.flower.vo.ShoppingCartVO;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -22,12 +25,15 @@ import java.util.List;
  * 订单表;(order)表控制层
  * @author : Xueqing
  */
-// @Api(tags = "订单表对象功能接口")
+@Api(tags = "订单表对象功能接口")
 @RestController
 @RequestMapping("/order")
 public class OrderController extends BaseController {
     @Autowired
     private OrderService orderService;
+    
+    @Autowired
+    private ShoppingCartService shoppingCartService;
 
     @ApiOperation("通过ID查询单条数据")
     @GetMapping("{id}")
@@ -80,5 +86,11 @@ public class OrderController extends BaseController {
             @Min(value = 1, message = "订单ID必须大于0") 
             @PathVariable Long id){
         return success(orderService.removeById(id));
+    }
+    
+    @ApiOperation("从购物车创建订单")
+    @PostMapping("/createOrderFromCart")
+    public ResponseResult<Order> createOrderFromCart(@RequestBody List<ShoppingCart> cartItems) {
+        return success();
     }
 }
