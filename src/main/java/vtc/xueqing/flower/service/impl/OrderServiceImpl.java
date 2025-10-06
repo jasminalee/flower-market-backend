@@ -18,9 +18,12 @@ import vtc.xueqing.flower.service.ProductService;
 import vtc.xueqing.flower.service.ProductSkuService;
 import vtc.xueqing.flower.service.ReceiverAddressService;
 import vtc.xueqing.flower.common.OrderNoGenerator;
+import vtc.xueqing.flower.vo.OrderDetailVO;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 订单表;(order)表服务实现类
@@ -130,5 +133,26 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         return createOrderFromDirectPurchase(userId, merchantProductId, quantity,
                 receiverAddress.getReceiverName(), receiverAddress.getReceiverPhone(),
                 fullAddress.toString(), "");
+    }
+    
+    @Override
+    public OrderDetailVO getOrderDetail(Long orderId) {
+        // 查询订单主表信息
+        Order order = this.getById(orderId);
+        if (order == null) {
+            throw new RuntimeException("订单不存在");
+        }
+        
+        // 查询订单项列表
+        LambdaQueryWrapper<OrderItem> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(OrderItem::getOrderId, orderId);
+        List<OrderItem> orderItems = orderItemService.list(queryWrapper);
+        
+        // 封装返回结果
+        OrderDetailVO orderDetailVO = new OrderDetailVO();
+        orderDetailVO.setOrder(order);
+        orderDetailVO.setOrderItems(orderItems);
+        
+        return orderDetailVO;
     }
 }

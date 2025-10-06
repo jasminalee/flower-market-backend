@@ -11,6 +11,7 @@ import vtc.xueqing.flower.common.ResponseResult;
 import vtc.xueqing.flower.config.BaseController;
 import vtc.xueqing.flower.entity.Order;
 import vtc.xueqing.flower.service.OrderService;
+import vtc.xueqing.flower.vo.OrderDetailVO;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -37,6 +38,17 @@ public class OrderController extends BaseController {
             @Min(value = 1, message = "订单ID必须大于0") 
             @PathVariable Long id){
         return success(orderService.getById(id));
+    }
+    
+    @ApiOperation("通过ID查询订单详情（包含订单项）")
+    @GetMapping("/{id}/detail")
+    public ResponseResult<OrderDetailVO> getOrderDetail(
+            @ApiParam("订单ID") 
+            @NotNull(message = "订单ID不能为空") 
+            @Min(value = 1, message = "订单ID必须大于0") 
+            @PathVariable Long id){
+        OrderDetailVO orderDetail = orderService.getOrderDetail(id);
+        return success(orderDetail);
     }
 
     @ApiOperation("分页查询")

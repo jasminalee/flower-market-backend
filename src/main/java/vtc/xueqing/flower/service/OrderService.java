@@ -2,6 +2,7 @@ package vtc.xueqing.flower.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import vtc.xueqing.flower.entity.Order;
+import vtc.xueqing.flower.vo.OrderDetailVO;
 
 /**
  * 订单表;(order)表服务接口
@@ -33,4 +34,11 @@ public interface OrderService extends IService<Order> {
      */
     Order createOrderFromDirectPurchase(Long userId, Long merchantProductId, Integer quantity,
                                        Long receiverAddressId);
+    
+    /**
+     * 根据订单ID查询订单详情（包含订单项）
+     * @param orderId 订单ID
+     * @return 订单详情VO
+     */
+    OrderDetailVO getOrderDetail(Long orderId);
 }
