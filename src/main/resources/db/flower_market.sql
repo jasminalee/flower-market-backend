@@ -373,6 +373,7 @@ CREATE TABLE `sys_user` (
   `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '邮箱',
   `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '手机号',
   `addr` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '地址',
+  `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '头像URL',
   `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态（0-禁用，1-正常）',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -385,7 +386,7 @@ CREATE TABLE `sys_user` (
 -- Dumping data for table `sys_user`
 --
 
-INSERT INTO `sys_user` VALUES (1,'admin','admin','管理员','admin@example.com','13800000000','北京市朝阳区',1,'2025-09-29 13:17:21','2025-09-29 13:17:21'),(2,'user1','user1','用户1','user1@example.com','13800000001','上海市浦东新区',1,'2025-09-29 13:17:21','2025-09-29 13:17:21'),(3,'user2','user2','用户2','user2@example.com','13800000002','广州市天河区',1,'2025-09-29 13:17:21','2025-09-29 13:17:21');
+INSERT INTO `sys_user` VALUES (1,'admin','admin','管理员','admin@example.com','13800000000','北京市朝阳区',NULL,1,'2025-09-29 13:17:21','2025-09-29 13:17:21'),(2,'user1','user1','用户1','user1@example.com','13800000001','上海市浦东新区',NULL,1,'2025-09-29 13:17:21','2025-09-29 13:17:21'),(3,'user2','user2','用户2','user2@example.com','13800000002','广州市天河区',NULL,1,'2025-09-29 13:17:21','2025-09-29 13:17:21');
 
 --
 -- Table structure for table `sys_user_role`

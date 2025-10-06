@@ -51,6 +51,9 @@ public class SysUser implements Serializable, Cloneable {
     @ApiModelProperty("用户状态（0-禁用，1-正常）")
     private Integer status;
 
+    @ApiModelProperty("用户头像URL")
+    private String avatar;
+
     @ApiModelProperty("创建时间")
     private LocalDateTime createTime;
 

@@ -20,7 +20,7 @@ import java.util.Objects;
  *
  * @author : Xueqing
  */
-@Api(tags = "通用评论表对象功能接口")
+// @Api(tags = "通用评论表对象功能接口")
 @RestController
 @RequestMapping("/comment")
 public class CommentController extends BaseController {
