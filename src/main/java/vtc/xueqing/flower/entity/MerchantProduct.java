@@ -57,6 +57,9 @@ public class MerchantProduct implements Serializable, Cloneable {
     @ApiModelProperty("产品描述")
     private String description;
 
+    @ApiModelProperty("主图URL")
+    private String mainImage;
+
     @ApiModelProperty("子图URL集合，JSON格式存储")
     private String subImages;
 
