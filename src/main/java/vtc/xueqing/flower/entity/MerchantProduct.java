@@ -8,6 +8,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,20 +27,28 @@ public class MerchantProduct implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("主键ID")
+    @ApiModelProperty("ID")
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty("商户ID（关联sys_user表）")
+    @ApiModelProperty("商户ID（逻辑关联sys_user表）")
+    @NotNull(message = "商户ID不能为空")
     private Long merchantId;
 
-    @ApiModelProperty("产品ID")
+    @ApiModelProperty("产品ID（逻辑关联product表）")
+    @NotNull(message = "产品ID不能为空")
     private Long productId;
 
-    @ApiModelProperty("SKU ID")
+    @ApiModelProperty("SKU ID（逻辑关联product_sku表）")
+    @NotNull(message = "SKU ID不能为空")
     private Long skuId;
 
+    @ApiModelProperty("商品名称")
+    @NotBlank(message = "商品名称不能为空")
+    private String merchantName;
+
     @ApiModelProperty("商户定价")
+    @NotNull(message = "商户定价不能为空")
     private BigDecimal price;
 
     @ApiModelProperty("品牌")

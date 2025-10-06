@@ -19,7 +19,6 @@ import vtc.xueqing.flower.service.ProductService;
 import vtc.xueqing.flower.service.ProductSkuService;
 import vtc.xueqing.flower.service.SysUserService;
 import vtc.xueqing.flower.vo.MerchantProductVO;
-import vtc.xueqing.flower.vo.MerchantProductWithProductInfoVO;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -60,7 +59,7 @@ public class MerchantProductController extends BaseController {
 
     @ApiOperation("分页查询（支持根据产品名称或编码查询）")
     @GetMapping("/page")
-    public ResponseResult<Page<MerchantProductWithProductInfoVO>> paginQuery(
+    public ResponseResult<Page<MerchantProduct>> paginQuery(
             @ApiParam("商户id(用户id)") @RequestParam(required = false) String merchantId,
             @ApiParam("产品名称") @RequestParam(required = false) String productName,
             @ApiParam("产品编码") @RequestParam(required = false) String productCode,
@@ -74,77 +73,11 @@ public class MerchantProductController extends BaseController {
         // 构建查询条件
         LambdaQueryWrapper<MerchantProduct> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(StrUtil.isNotBlank(merchantId), MerchantProduct::getMerchantId, merchantId);
-        // 如果提供了产品名称或编码，则先查询产品表获取匹配的产品ID
-        if (productName != null || productCode != null) {
-            LambdaQueryWrapper<Product> productWrapper = new LambdaQueryWrapper<>();
-            productWrapper.like(StrUtil.isNotBlank(productName), Product::getProductName, productName);
-            productWrapper.like(StrUtil.isNotBlank(productCode), Product::getProductCode, productCode);
-
-            List<Product> products = productService.list(productWrapper);
-            if (products.isEmpty()) {
-                // 如果没有匹配的产品，返回空分页结果
-                Page<MerchantProductWithProductInfoVO> emptyPage = new Page<>(current, size);
-                emptyPage.setRecords(Collections.emptyList());
-                emptyPage.setTotal(0L);
-                return success(emptyPage);
-            } else {
-                // 获取匹配的产品ID列表
-                List<Long> productIds = products.stream().map(Product::getId).collect(Collectors.toList());
-                wrapper.in(MerchantProduct::getProductId, productIds);
-            }
-        }
 
         // 执行分页查询
         Page<MerchantProduct> merchantProductPage = merchantProductService.page(getPage(current, size), wrapper);
 
-        // 转换为VO对象
-        Page<MerchantProductWithProductInfoVO> voPage = new Page<>(current, size);
-        voPage.setTotal(merchantProductPage.getTotal());
-
-        List<MerchantProductWithProductInfoVO> voList = merchantProductPage.getRecords().stream().map(merchantProduct -> {
-            MerchantProductWithProductInfoVO vo = new MerchantProductWithProductInfoVO();
-            vo.setId(merchantProduct.getId());
-            vo.setMerchantId(merchantProduct.getMerchantId());
-            vo.setProductId(merchantProduct.getProductId());
-            vo.setSkuId(merchantProduct.getSkuId());
-            vo.setPrice(merchantProduct.getPrice());
-            vo.setBrand(merchantProduct.getBrand());
-            vo.setDescription(merchantProduct.getDescription());
-            vo.setSubImages(merchantProduct.getSubImages());
-            vo.setDetail(merchantProduct.getDetail());
-            vo.setStock(merchantProduct.getStock());
-            vo.setAvgRating(merchantProduct.getAvgRating());
-            vo.setTotalSales(merchantProduct.getTotalSales());
-            vo.setMinPrice(merchantProduct.getMinPrice());
-            vo.setIsHot(merchantProduct.getIsHot());
-            vo.setIsDiscounted(merchantProduct.getIsDiscounted());
-            vo.setStatus(merchantProduct.getStatus());
-            vo.setCreateTime(merchantProduct.getCreateTime());
-            vo.setUpdateTime(merchantProduct.getUpdateTime());
-            // 获取商户信息
-            // SysUser merchant = sysUserService.getById(merchantProduct.getMerchantId());
-            // vo.setMerchant(merchant);
-
-            // 获取产品信息
-            Product product = productService.getById(merchantProduct.getProductId());
-            if (product != null) {
-                vo.setProductName(product.getProductName());
-                vo.setProductCode(product.getProductCode());
-            }
-            
-            // 获取SKU信息
-            ProductSku sku = productSkuService.getById(merchantProduct.getSkuId());
-            if (sku != null) {
-                vo.setSkuName(sku.getSkuName());
-                vo.setSkuCode(sku.getSkuCode());
-            }
-
-            return vo;
-        }).collect(Collectors.toList());
-
-        voPage.setRecords(voList);
-
-        return success(voPage);
+        return success(merchantProductPage);
     }
 
     @ApiOperation("查询商品在各商户的价格和库存")

@@ -22,7 +22,7 @@ import java.util.List;
  * 订单明细表;(order_item)表控制层
  * @author : Xueqing
  */
-@Api(tags = "订单明细表对象功能接口")
+// @Api(tags = "订单明细表对象功能接口")
 @RestController
 @RequestMapping("/orderItem")
 public class OrderItemController extends BaseController {

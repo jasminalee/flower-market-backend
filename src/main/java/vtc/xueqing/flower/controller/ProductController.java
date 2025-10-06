@@ -89,11 +89,12 @@ public class ProductController extends BaseController {
         
         // 按关键字搜索
         if (keyword != null && !keyword.isEmpty()) {
-            wrapper.and(w -> w.like(Product::getProductName, keyword)
-                    .or()
-                    .like(Product::getBrand, keyword)
-                    .or()
-                    .like(Product::getDescription, keyword));
+            wrapper.and(w -> w.like(Product::getProductName, keyword))
+                    // .or()
+                    // .like(Product::getBrand, keyword)
+                    // .or()
+                    // .like(Product::getDescription, keyword))
+                    ;
         }
         
         // 按创建时间倒序排列
