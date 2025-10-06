@@ -22,4 +22,15 @@ public interface OrderService extends IService<Order> {
     Order createOrderFromDirectPurchase(Long userId, Long merchantProductId, Integer quantity,
                                        String receiverName, String receiverPhone, 
                                        String receiverAddress, String remark);
+    
+    /**
+     * 直接购买商品生成订单（使用收货地址ID）
+     * @param userId 用户ID
+     * @param merchantProductId 商户产品ID
+     * @param quantity 购买数量
+     * @param receiverAddressId 收货地址ID
+     * @return 生成的订单
+     */
+    Order createOrderFromDirectPurchase(Long userId, Long merchantProductId, Integer quantity,
+                                       Long receiverAddressId);
 }

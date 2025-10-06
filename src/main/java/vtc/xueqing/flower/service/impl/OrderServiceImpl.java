@@ -9,12 +9,14 @@ import vtc.xueqing.flower.entity.Order;
 import vtc.xueqing.flower.entity.OrderItem;
 import vtc.xueqing.flower.entity.Product;
 import vtc.xueqing.flower.entity.ProductSku;
+import vtc.xueqing.flower.entity.ReceiverAddress;
 import vtc.xueqing.flower.mapper.OrderMapper;
 import vtc.xueqing.flower.service.MerchantProductService;
 import vtc.xueqing.flower.service.OrderItemService;
 import vtc.xueqing.flower.service.OrderService;
 import vtc.xueqing.flower.service.ProductService;
 import vtc.xueqing.flower.service.ProductSkuService;
+import vtc.xueqing.flower.service.ReceiverAddressService;
 import vtc.xueqing.flower.common.OrderNoGenerator;
 
 import java.math.BigDecimal;
@@ -39,6 +41,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     
     @Autowired
     private ProductSkuService productSkuService;
+    
+    @Autowired
+    private ReceiverAddressService receiverAddressService;
     
     @Override
     @Transactional
@@ -100,5 +105,30 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         orderItemService.save(orderItem);
         
         return order;
+    }
+    
+    @Override
+    @Transactional
+    public Order createOrderFromDirectPurchase(Long userId, Long merchantProductId, Integer quantity,
+                                              Long receiverAddressId) {
+        // 获取收货地址信息
+        ReceiverAddress receiverAddress = receiverAddressService.getById(receiverAddressId);
+        if (receiverAddress == null) {
+            throw new RuntimeException("收货地址不存在");
+        }
+        
+        // 拼接完整地址
+        StringBuilder fullAddress = new StringBuilder();
+        fullAddress.append(receiverAddress.getProvince())
+                  .append(receiverAddress.getCity());
+        if (receiverAddress.getDistrict() != null && !receiverAddress.getDistrict().isEmpty()) {
+            fullAddress.append(receiverAddress.getDistrict());
+        }
+        fullAddress.append(receiverAddress.getDetailAddress());
+        
+        // 调用原有的购买方法
+        return createOrderFromDirectPurchase(userId, merchantProductId, quantity,
+                receiverAddress.getReceiverName(), receiverAddress.getReceiverPhone(),
+                fullAddress.toString(), "");
     }
 }

@@ -22,7 +22,7 @@ import java.util.List;
  * 订单表;(order)表控制层
  * @author : Xueqing
  */
-// @Api(tags = "订单表对象功能接口")
+@Api(tags = "订单表对象功能接口")
 @RestController
 @RequestMapping("/order")
 public class OrderController extends BaseController {
@@ -88,13 +88,9 @@ public class OrderController extends BaseController {
             @ApiParam("用户ID") @RequestParam Long userId,
             @ApiParam("商户产品ID") @RequestParam Long merchantProductId,
             @ApiParam("购买数量") @RequestParam Integer quantity,
-            @ApiParam("收货人姓名") @RequestParam String receiverName,
-            @ApiParam("收货人电话") @RequestParam String receiverPhone,
-            @ApiParam("收货地址") @RequestParam String receiverAddress,
-            @ApiParam("订单备注") @RequestParam(required = false) String remark) {
+            @ApiParam("收货信息ID") @RequestParam Long receiverAddressId) {
         
-        Order order = orderService.createOrderFromDirectPurchase(userId, merchantProductId, quantity,
-                receiverName, receiverPhone, receiverAddress, remark);
+        Order order = orderService.createOrderFromDirectPurchase(userId, merchantProductId, quantity, receiverAddressId);
         
         return success(order);
     }
