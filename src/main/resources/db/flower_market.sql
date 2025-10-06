@@ -40,14 +40,14 @@ CREATE TABLE `comment` (
   KEY `idx_user_id` (`user_id`) USING BTREE,
   KEY `idx_parent_id` (`parent_id`) USING BTREE,
   KEY `idx_rating` (`rating`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='通用评论表';
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='通用评论表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `comment`
 --
 
-INSERT INTO `comment` VALUES (1,1,'product',2,0,NULL,5,'红玫瑰非常新鲜，包装也很精美，很满意！',0,1,'2025-09-29 13:17:23','2025-09-29 13:17:23'),(2,1,'product',3,0,NULL,4,'花很不错，但配送稍微晚了一天',1,1,'2025-09-29 13:17:23','2025-09-29 13:17:23'),(3,1,'product',2,1,NULL,5,'感谢您的好评，我们会继续努力提供更好的服务',0,1,'2025-09-29 13:17:23','2025-09-29 13:17:23'),(4,2,'product',3,0,NULL,5,'白百合很香，品质很好',0,1,'2025-09-29 13:17:23','2025-09-29 13:17:23');
+INSERT INTO `comment` VALUES (9,1,'product',1,0,NULL,5,'测试阿斯达',0,1,'2025-10-06 08:00:14','2025-10-06 08:00:14'),(10,1,'product',1,0,NULL,NULL,'1231 ',0,1,'2025-10-06 08:00:18','2025-10-06 08:00:18'),(11,1,'product',1,10,NULL,0,'测试',0,1,'2025-10-06 08:03:10','2025-10-06 08:03:10'),(12,1,'product',1,9,NULL,NULL,'测试',0,1,'2025-10-06 08:06:49','2025-10-06 08:06:49'),(13,2,'product',1,0,NULL,4,'测试算阿达打',0,1,'2025-10-06 08:08:29','2025-10-06 08:08:29');
 
 --
 -- Table structure for table `merchant_product`
@@ -271,14 +271,14 @@ CREATE TABLE `shopping_cart` (
   KEY `idx_user_id` (`user_id`),
   KEY `idx_product_id` (`product_id`),
   KEY `idx_sku_id` (`sku_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='购物车表';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='购物车表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `shopping_cart`
 --
 
-INSERT INTO `shopping_cart` VALUES (1,2,3,5,1,1,45.00,1,'2025-10-01 10:00:00','2025-10-01 10:00:00'),(2,3,4,6,1,2,38.00,1,'2025-10-01 15:00:00','2025-10-01 15:00:00'),(3,2,1,2,1,1,168.00,1,'2025-10-02 09:30:00','2025-10-02 09:30:00'),(4,3,5,7,1,3,28.00,1,'2025-10-02 14:20:00','2025-10-02 14:20:00');
+INSERT INTO `shopping_cart` VALUES (1,2,3,5,1,1,45.00,1,'2025-10-01 10:00:00','2025-10-01 10:00:00'),(2,3,4,6,1,2,38.00,1,'2025-10-01 15:00:00','2025-10-01 15:00:00'),(3,2,1,2,1,1,168.00,1,'2025-10-02 09:30:00','2025-10-02 09:30:00'),(4,3,5,7,1,3,28.00,1,'2025-10-02 14:20:00','2025-10-02 14:20:00'),(5,1,1,1,1,2,395.00,1,'2025-10-06 15:32:46','2025-10-06 15:35:59'),(6,1,3,5,1,1,304.00,1,'2025-10-06 15:33:42','2025-10-06 15:33:42');
 
 --
 -- Table structure for table `sys_permission`
@@ -386,7 +386,7 @@ CREATE TABLE `sys_user` (
 -- Dumping data for table `sys_user`
 --
 
-INSERT INTO `sys_user` VALUES (1,'admin','admin','管理员','admin@example.com','13800000000','北京市朝阳区',NULL,1,'2025-09-29 13:17:21','2025-09-29 13:17:21'),(2,'user1','user1','用户1','user1@example.com','13800000001','上海市浦东新区',NULL,1,'2025-09-29 13:17:21','2025-09-29 13:17:21'),(3,'user2','user2','用户2','user2@example.com','13800000002','广州市天河区',NULL,1,'2025-09-29 13:17:21','2025-09-29 13:17:21');
+INSERT INTO `sys_user` VALUES (1,'admin','admin','管理员','admin@example.com','13800000000','北京市朝阳区','http://localhost:18091/images/uploads/7af6d51e3b2841d3bbba15d3ab923bb1.jpg',1,'2025-09-29 13:17:21','2025-09-29 13:17:21'),(2,'user1','user1','用户1','user1@example.com','13800000001','上海市浦东新区',NULL,1,'2025-09-29 13:17:21','2025-09-29 13:17:21'),(3,'user2','user2','用户2','user2@example.com','13800000002','广州市天河区',NULL,1,'2025-09-29 13:17:21','2025-09-29 13:17:21');
 
 --
 -- Table structure for table `sys_user_role`
@@ -421,4 +421,4 @@ INSERT INTO `sys_user_role` VALUES (1,1,1,'2025-09-29 13:17:22'),(2,2,2,'2025-09
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-06 15:19:03
+-- Dump completed on 2025-10-06 19:43:30
