@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import vtc.xueqing.flower.common.ResponseResult;
 import vtc.xueqing.flower.config.BaseController;
 import vtc.xueqing.flower.entity.Order;
-import vtc.xueqing.flower.entity.ShoppingCart;
 import vtc.xueqing.flower.service.OrderService;
-import vtc.xueqing.flower.service.ShoppingCartService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -30,9 +28,6 @@ import java.util.List;
 public class OrderController extends BaseController {
     @Autowired
     private OrderService orderService;
-    
-    @Autowired
-    private ShoppingCartService shoppingCartService;
 
     @ApiOperation("通过ID查询单条数据")
     @GetMapping("{id}")
@@ -87,9 +82,20 @@ public class OrderController extends BaseController {
         return success(orderService.removeById(id));
     }
     
-    @ApiOperation("从购物车创建订单")
-    @PostMapping("/createOrderFromCart")
-    public ResponseResult<Order> createOrderFromCart(@RequestBody List<ShoppingCart> cartItems) {
-        return success();
+    @ApiOperation("直接购买生成订单")
+    @PostMapping("/createOrderFromDirectPurchase")
+    public ResponseResult<Order> createOrderFromDirectPurchase(
+            @ApiParam("用户ID") @RequestParam Long userId,
+            @ApiParam("商户产品ID") @RequestParam Long merchantProductId,
+            @ApiParam("购买数量") @RequestParam Integer quantity,
+            @ApiParam("收货人姓名") @RequestParam String receiverName,
+            @ApiParam("收货人电话") @RequestParam String receiverPhone,
+            @ApiParam("收货地址") @RequestParam String receiverAddress,
+            @ApiParam("订单备注") @RequestParam(required = false) String remark) {
+        
+        Order order = orderService.createOrderFromDirectPurchase(userId, merchantProductId, quantity,
+                receiverName, receiverPhone, receiverAddress, remark);
+        
+        return success(order);
     }
 }
