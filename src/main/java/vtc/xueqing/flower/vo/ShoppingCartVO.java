@@ -17,8 +17,8 @@ public class ShoppingCartVO {
     @ApiModelProperty("用户ID（逻辑关联sys_user表）")
     private Long userId;
 
-    @ApiModelProperty("产品ID（逻辑关联product表）")
-    private Long productId;
+    @ApiModelProperty("商品ID（逻辑关联merchantProduct表）")
+    private Long merchantProductId;
 
     @ApiModelProperty("SKU ID（逻辑关联product_sku表）")
     private Long skuId;

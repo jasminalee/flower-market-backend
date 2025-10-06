@@ -13,7 +13,6 @@ import vtc.xueqing.flower.entity.Order;
 import vtc.xueqing.flower.entity.ShoppingCart;
 import vtc.xueqing.flower.service.OrderService;
 import vtc.xueqing.flower.service.ShoppingCartService;
-import vtc.xueqing.flower.vo.ShoppingCartVO;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
