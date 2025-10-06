@@ -177,11 +177,11 @@ CREATE TABLE `product`  (
 -- ----------------------------
 -- Records of product
 -- ----------------------------
-INSERT INTO `product` VALUES (1, '红玫瑰12', 'FLOWER-001', 4, '花语1', '鲜艳的红玫瑰，适合表达爱意', 'http://localhost:18091/images/uploads/9497d8b9074b4652bc2bf04804a451a3.jpg', NULL, '<ul><li><span style=\"color: rgb(255, 77, 79);\">测试标签</span></li></ul><p><img src=\"http://localhost:18091/images/uploads/760c4697d3d640ce82faa0652d9c97ff.jpg\" alt=\"image.png\" data-href=\"图片加载中...\" style=\"\"/></p>', 2, 1, 4.80, 150, 109.00, 1, 1, '2025-09-29 13:17:22', '2025-10-04 02:05:55');
-INSERT INTO `product` VALUES (2, '白百合', 'FLOWER-002', 5, '花之语', '纯洁的白百合，象征百年好合', 'http://localhost:18091/images/products/lily.svg', NULL, NULL, 1, 1, 4.75, 85, 85.00, 0, 0, '2025-09-29 13:17:22', '2025-09-29 13:17:22');
-INSERT INTO `product` VALUES (3, '园艺剪刀', 'TOOL-001', 6, '园艺大师', '专业园艺剪刀，锋利耐用', 'http://localhost:18091/images/products/scissors.svg', NULL, NULL, 2, 1, 5.00, 30, 50.00, 0, 1, '2025-09-29 13:17:22', '2025-09-29 13:17:22');
-INSERT INTO `product` VALUES (4, '浇水壶', 'TOOL-002', 7, '花园家', '容量大，喷洒均匀的浇水壶', 'http://localhost:18091/images/products/watering-can.svg', NULL, NULL, 2, 1, 0.00, 0, 42.00, 0, 1, '2025-09-29 13:17:22', '2025-09-29 13:17:22');
-INSERT INTO `product` VALUES (5, '有机肥料', 'FERT-001', 8, '绿色家园', '天然有机肥料，环保无污染', 'http://localhost:18091/images/products/fertilizer.svg', NULL, NULL, 2, 1, 0.00, 0, 28.00, 0, 0, '2025-09-29 13:17:22', '2025-09-29 13:17:22');
+INSERT INTO `product` VALUES (1, '红玫瑰12', 'FLOWER-001', 4, 'http://localhost:18091/images/uploads/9497d8b9074b4652bc2bf04804a451a3.jpg', 1, 1, '2025-09-29 13:17:22', '2025-10-04 02:05:55');
+INSERT INTO `product` VALUES (2, '白百合', 'FLOWER-002', 5, 'http://localhost:18091/images/products/lily.svg', 1, 1, '2025-09-29 13:17:22', '2025-09-29 13:17:22');
+INSERT INTO `product` VALUES (3, '园艺剪刀', 'TOOL-001', 6, 'http://localhost:18091/images/products/scissors.svg', 2, 1, '2025-09-29 13:17:22', '2025-09-29 13:17:22');
+INSERT INTO `product` VALUES (4, '浇水壶', 'TOOL-002', 7, 'http://localhost:18091/images/products/watering-can.svg', 2, 1, '2025-09-29 13:17:22', '2025-09-29 13:17:22');
+INSERT INTO `product` VALUES (5, '有机肥料', 'FERT-001', 8, 'http://localhost:18091/images/products/fertilizer.svg', 2, 1, '2025-09-29 13:17:22', '2025-09-29 13:17:22');
 
 -- ----------------------------
 -- Table structure for product_category
