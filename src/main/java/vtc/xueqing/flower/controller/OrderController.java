@@ -23,7 +23,7 @@ import java.util.List;
  * 订单表;(order)表控制层
  * @author : Xueqing
  */
-@Api(tags = "订单表对象功能接口")
+// @Api(tags = "订单表对象功能接口")
 @RestController
 @RequestMapping("/order")
 public class OrderController extends BaseController {
@@ -60,7 +60,7 @@ public class OrderController extends BaseController {
                                                     @ApiParam("每页数量") 
                                                     @RequestParam(defaultValue = "10") 
                                                     @Min(value = 1, message = "每页数量必须大于0") Long size){
-        LambdaQueryWrapper<Order> wrapper = new LambdaQueryWrapper<>(order);
+        LambdaQueryWrapper<Order> wrapper = new LambdaQueryWrapper<>(order).orderByDesc(Order::getUpdateTime);
         Page<Order> pageResult = orderService.page(getPage(current, size), wrapper);
         
         // 处理空数据情况，确保返回空数组而不是null

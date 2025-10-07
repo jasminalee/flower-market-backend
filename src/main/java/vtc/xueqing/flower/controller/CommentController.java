@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import vtc.xueqing.flower.common.ResponseResult;
@@ -20,7 +21,7 @@ import java.util.Objects;
  *
  * @author : Xueqing
  */
-// @Api(tags = "通用评论表对象功能接口")
+@Api(tags = "通用评论表对象功能接口")
 @RestController
 @RequestMapping("/comment")
 public class CommentController extends BaseController {
@@ -52,6 +53,19 @@ public class CommentController extends BaseController {
         wrapper.eq(Comment::getSourceId, sourceId)
                 .eq(Comment::getSourceType, sourceType)
                 .eq(Objects.nonNull(parentId), Comment::getParentId, parentId)
+                .eq(Comment::getStatus, 1)
+                .orderByDesc(Comment::getCreateTime);
+        return success(commentService.list(wrapper));
+    }
+    
+    @ApiOperation("根据帖子ID查询论坛评论列表（包含层级结构）")
+    @GetMapping("/forum/{postId}")
+    public ResponseResult<List<Comment>> listForumComments(
+            @ApiParam("帖子ID")
+            @PathVariable Long postId) {
+        LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Comment::getSourceId, postId)
+                .eq(Comment::getSourceType, "forum")
                 .eq(Comment::getStatus, 1)
                 .orderByDesc(Comment::getCreateTime);
         return success(commentService.list(wrapper));

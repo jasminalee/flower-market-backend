@@ -22,7 +22,7 @@ import java.util.List;
  * 收货信息表;(receiver_address)表控制层
  * @author : Xueqing
  */
-@Api(tags = "收货信息表对象功能接口")
+// @Api(tags = "收货信息表对象功能接口")
 @RestController
 @RequestMapping("/receiverAddress")
 public class ReceiverAddressController extends BaseController {

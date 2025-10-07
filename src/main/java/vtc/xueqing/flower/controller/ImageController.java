@@ -16,7 +16,7 @@ import vtc.xueqing.flower.config.BaseController;
 
 import java.io.File;
 
-// @Api(tags = "图片查询接口")
+@Api(tags = "图片查询接口")
 @Slf4j
 @RestController
 @RequestMapping("/images")

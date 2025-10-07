@@ -21,7 +21,7 @@ import java.util.List;
  * 支付方式表;(payment_method)表控制层
  * @author : Xueqing
  */
-@Api(tags = "支付方式表对象功能接口")
+// @Api(tags = "支付方式表对象功能接口")
 @RestController
 @RequestMapping("/paymentMethod")
 public class PaymentMethodController extends BaseController {

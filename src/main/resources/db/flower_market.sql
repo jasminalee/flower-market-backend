@@ -110,7 +110,7 @@ CREATE TABLE `order` (
   `receiver_phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '收货人电话',
   `receiver_address` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '收货地址',
   `payment_method` tinyint DEFAULT NULL COMMENT '支付方式（1-支付宝，2-微信，3-银行卡）',
-  `payment_time` datetime DEFAULT NULL COMMENT '支付时间',
+  `payment_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '支付时间',
   `delivery_time` datetime DEFAULT NULL COMMENT '发货时间',
   `receive_time` datetime DEFAULT NULL COMMENT '收货时间',
   `remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '订单备注',
@@ -128,7 +128,6 @@ CREATE TABLE `order` (
 -- Dumping data for table `order`
 --
 
-INSERT INTO `order` VALUES (1,'ORD202510020001',2,1,218.00,10.00,208.00,4,'用户1','13800000001','上海市浦东新区',2,'2025-10-02 10:00:00','2025-10-02 15:00:00','2025-10-05 10:00:00','请尽快发货','2025-10-02 10:00:00','2025-10-05 10:00:00'),(2,'ORD202510020002',3,1,78.00,0.00,78.00,2,'用户2','13800000002','广州市天河区',1,'2025-10-02 11:00:00',NULL,NULL,'','2025-10-02 11:00:00','2025-10-02 11:00:00');
 
 --
 -- Table structure for table `order_item`
@@ -154,14 +153,46 @@ CREATE TABLE `order_item` (
   KEY `idx_order_id` (`order_id`) USING BTREE,
   KEY `idx_product_id` (`product_id`) USING BTREE,
   KEY `idx_sku_id` (`sku_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='订单明细表';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='订单明细表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `order_item`
 --
 
-INSERT INTO `order_item` VALUES (1,1,1,2,1,'红玫瑰1','红玫瑰-21朵装',168.00,1,168.00,'2025-10-02 10:00:00','2025-10-02 10:00:00'),(2,1,5,7,1,'有机肥料','有机肥料-1kg装',28.00,2,56.00,'2025-10-02 10:00:00','2025-10-02 10:00:00'),(3,2,2,3,1,'白百合','白百合-6支装',78.00,1,78.00,'2025-10-02 11:00:00','2025-10-02 11:00:00');
+INSERT INTO `order_item` VALUES (1,1,1,2,1,'红玫瑰1','红玫瑰-21朵装',168.00,1,168.00,'2025-10-02 10:00:00','2025-10-02 10:00:00'),(2,1,5,7,1,'有机肥料','有机肥料-1kg装',28.00,2,56.00,'2025-10-02 10:00:00','2025-10-02 10:00:00'),(3,2,2,3,1,'白百合','白百合-6支装',78.00,1,78.00,'2025-10-02 11:00:00','2025-10-02 11:00:00'),(4,3,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 21:10:44','2025-10-06 21:10:44'),(5,4,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 21:12:43','2025-10-06 21:12:43'),(6,5,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 21:14:35','2025-10-06 21:14:35'),(7,6,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 21:15:09','2025-10-06 21:15:09'),(8,7,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 21:16:10','2025-10-06 21:16:10'),(9,8,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,2,356.00,'2025-10-06 21:20:14','2025-10-06 21:20:14'),(10,9,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 22:24:26','2025-10-06 22:24:26'),(11,10,1,1,1,'红玫瑰-测试','红玫瑰-11朵装',109.00,1,109.00,'2025-10-06 22:53:27','2025-10-06 22:53:27'),(12,11,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 22:55:48','2025-10-06 22:55:48'),(13,12,2,3,1,'白百合','白百合-6支装',85.00,1,85.00,'2025-10-07 12:18:40','2025-10-07 12:18:40'),(14,13,5,7,1,'有机肥料','有机肥料-1kg装',28.00,1,28.00,'2025-10-07 12:24:21','2025-10-07 12:24:21');
+
+--
+-- Table structure for table `payment_method`
+--
+
+DROP TABLE IF EXISTS `payment_method`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `payment_method` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '支付方式ID',
+  `user_id` bigint NOT NULL COMMENT '用户ID（逻辑关联sys_user表）',
+  `method_name` varchar(50) NOT NULL COMMENT '支付方式名称',
+  `method_code` varchar(20) NOT NULL COMMENT '支付方式编码',
+  `description` varchar(200) DEFAULT NULL COMMENT '支付方式描述',
+  `account_number` varchar(50) DEFAULT NULL COMMENT '账户号码/卡号',
+  `account_name` varchar(50) DEFAULT NULL COMMENT '账户名称',
+  `bank_name` varchar(100) DEFAULT NULL COMMENT '银行名称',
+  `bank_branch` varchar(100) DEFAULT NULL COMMENT '开户行',
+  `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态（0-禁用，1-启用）',
+  `sort` int DEFAULT '0' COMMENT '排序号',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='支付方式表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `payment_method`
+--
+
+INSERT INTO `payment_method` VALUES (1,1,'支付宝','ALIPAY','支付宝支付','13800000001','张三',NULL,NULL,1,1,'2025-10-06 13:53:03','2025-10-06 13:53:03'),(2,1,'微信支付','WECHAT_PAY','微信支付','13800000001','张三',NULL,NULL,1,2,'2025-10-06 13:53:03','2025-10-06 13:53:03'),(3,2,'银行卡支付','BANK_CARD','银行卡支付','6222001234567890','李四','工商银行','北京分行',1,3,'2025-10-06 13:53:03','2025-10-06 13:53:03'),(4,3,'支付宝','ALIPAY','支付宝支付','13800000002','王五',NULL,NULL,1,1,'2025-10-06 13:53:03','2025-10-06 13:53:03');
 
 --
 -- Table structure for table `product`
@@ -250,6 +281,37 @@ CREATE TABLE `product_sku` (
 INSERT INTO `product_sku` VALUES (1,1,'红玫瑰-11朵装','ROSE-11',99.00,100,'{\"颜色\": \"红色\", \"数量\": 11}',1,'2025-09-29 13:17:22','2025-09-29 13:17:22'),(2,1,'红玫瑰-21朵装','ROSE-21',168.00,50,'{\"颜色\": \"红色\", \"数量\": 21}',1,'2025-09-29 13:17:22','2025-09-29 13:17:22'),(3,2,'白百合-6支装','LILY-6',78.00,80,'{\"颜色\": \"白色\", \"数量\": 6}',1,'2025-09-29 13:17:22','2025-09-29 13:17:22'),(4,2,'白百合-12支装','LILY-12',138.00,40,'{\"颜色\": \"白色\", \"数量\": 12}',1,'2025-09-29 13:17:22','2025-09-29 13:17:22'),(5,3,'园艺剪刀-标准版','SCISSORS-S',45.00,30,'{\"材质\": \"不锈钢\", \"长度\": \"20cm\"}',1,'2025-09-29 13:17:22','2025-09-29 13:17:22'),(6,4,'浇水壶-大号','WATERCAN-L',38.00,25,'{\"容量\": \"2L\", \"颜色\": \"绿色\"}',1,'2025-09-29 13:17:22','2025-09-29 13:17:22'),(7,5,'有机肥料-1kg装','FERT-1KG',28.00,100,'{\"重量\": \"1kg\", \"类型\": \"颗粒状\"}',1,'2025-09-29 13:17:22','2025-09-29 13:17:22');
 
 --
+-- Table structure for table `receiver_address`
+--
+
+DROP TABLE IF EXISTS `receiver_address`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `receiver_address` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '地址ID',
+  `user_id` bigint NOT NULL COMMENT '用户ID（逻辑关联sys_user表）',
+  `receiver_name` varchar(50) NOT NULL COMMENT '收货人姓名',
+  `receiver_phone` varchar(20) NOT NULL COMMENT '收货人电话',
+  `province` varchar(50) NOT NULL COMMENT '省份',
+  `city` varchar(50) NOT NULL COMMENT '城市',
+  `district` varchar(50) DEFAULT NULL COMMENT '区/县',
+  `detail_address` varchar(200) NOT NULL COMMENT '详细地址',
+  `postal_code` varchar(10) DEFAULT NULL COMMENT '邮政编码',
+  `is_default` tinyint NOT NULL DEFAULT '0' COMMENT '是否默认地址（0-否，1-是）',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='收货信息表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `receiver_address`
+--
+
+INSERT INTO `receiver_address` VALUES (1,1,'张三','13800000001','北京市','北京市','朝阳区','陆家嘴金融中心1号楼101室','200001',1,'2025-10-02 10:00:00','2025-10-02 10:00:00'),(2,1,'张三','13800000001','北京市','北京市','朝阳区','三里屯大街18号','100001',0,'2025-10-02 10:05:00','2025-10-02 10:05:00'),(3,3,'李四','13800000002','广东省','广州市','天河区','珠江新城华夏路101号','510000',1,'2025-10-02 11:00:00','2025-10-02 11:00:00'),(4,4,'王五','13800000003','浙江省','杭州市','西湖区','文三路259号昌地火炬大厦201室','310000',1,'2025-10-02 12:00:00','2025-10-02 12:00:00');
+
+--
 -- Table structure for table `shopping_cart`
 --
 
@@ -278,7 +340,7 @@ CREATE TABLE `shopping_cart` (
 -- Dumping data for table `shopping_cart`
 --
 
-INSERT INTO `shopping_cart` VALUES (1,2,3,5,1,1,45.00,1,'2025-10-01 10:00:00','2025-10-01 10:00:00'),(2,3,4,6,1,2,38.00,1,'2025-10-01 15:00:00','2025-10-01 15:00:00'),(3,2,1,2,1,1,168.00,1,'2025-10-02 09:30:00','2025-10-02 09:30:00'),(4,3,5,7,1,3,28.00,1,'2025-10-02 14:20:00','2025-10-02 14:20:00'),(5,1,1,1,1,2,395.00,1,'2025-10-06 15:32:46','2025-10-06 15:35:59'),(6,1,3,5,1,1,304.00,1,'2025-10-06 15:33:42','2025-10-06 15:33:42');
+INSERT INTO `shopping_cart` VALUES (1,2,3,5,1,1,45.00,1,'2025-10-01 10:00:00','2025-10-01 10:00:00'),(2,3,4,6,1,2,38.00,1,'2025-10-01 15:00:00','2025-10-01 15:00:00'),(3,2,1,2,1,1,168.00,1,'2025-10-02 09:30:00','2025-10-02 09:30:00'),(4,3,5,7,1,3,28.00,1,'2025-10-02 14:20:00','2025-10-02 14:20:00'),(5,1,1,1,1,1,395.00,1,'2025-10-06 15:32:46','2025-10-06 13:01:20'),(6,1,3,5,1,1,304.00,1,'2025-10-06 15:33:42','2025-10-06 15:33:42');
 
 --
 -- Table structure for table `sys_permission`
@@ -421,34 +483,4 @@ INSERT INTO `sys_user_role` VALUES (1,1,1,'2025-09-29 13:17:22'),(2,2,2,'2025-09
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-06 19:43:30
-
-
--- 收货信息表
-DROP TABLE IF EXISTS `receiver_address`;
-CREATE TABLE `receiver_address` (
-                                    `id` bigint NOT NULL AUTO_INCREMENT COMMENT '地址ID',
-                                    `user_id` bigint NOT NULL COMMENT '用户ID（逻辑关联sys_user表）',
-                                    `receiver_name` varchar(50) NOT NULL COMMENT '收货人姓名',
-                                    `receiver_phone` varchar(20) NOT NULL COMMENT '收货人电话',
-                                    `province` varchar(50) NOT NULL COMMENT '省份',
-                                    `city` varchar(50) NOT NULL COMMENT '城市',
-                                    `district` varchar(50) DEFAULT NULL COMMENT '区/县',
-                                    `detail_address` varchar(200) NOT NULL COMMENT '详细地址',
-                                    `postal_code` varchar(10) DEFAULT NULL COMMENT '邮政编码',
-                                    `is_default` tinyint NOT NULL DEFAULT '0' COMMENT '是否默认地址（0-否，1-是）',
-                                    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                                    `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-                                    PRIMARY KEY (`id`),
-                                    KEY `idx_user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='收货信息表';
-
---
--- 收货地址测试数据
---
-
-INSERT INTO `receiver_address` VALUES
-                                   (1, 1, '张三', '13800000001', '上海市', '上海市', '浦东新区', '陆家嘴金融中心1号楼101室', '200001', 1, '2025-10-02 10:00:00', '2025-10-02 10:00:00'),
-                                   (2, 1, '张三', '13800000001', '北京市', '北京市', '朝阳区', '三里屯大街18号', '100001', 0, '2025-10-02 10:05:00', '2025-10-02 10:05:00'),
-                                   (3, 3, '李四', '13800000002', '广东省', '广州市', '天河区', '珠江新城华夏路101号', '510000', 1, '2025-10-02 11:00:00', '2025-10-02 11:00:00'),
-                                   (4, 4, '王五', '13800000003', '浙江省', '杭州市', '西湖区', '文三路259号昌地火炬大厦201室', '310000', 1, '2025-10-02 12:00:00', '2025-10-02 12:00:00');
+-- Dump completed on 2025-10-07 12:33:14
