@@ -11,12 +11,14 @@ import vtc.xueqing.flower.common.ResponseResult;
 import vtc.xueqing.flower.config.BaseController;
 import vtc.xueqing.flower.entity.ForumCategory;
 import vtc.xueqing.flower.service.ForumCategoryService;
+import vtc.xueqing.flower.vo.ForumCategoryTreeVO;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 论坛板块表;(forum_category)表控制层
@@ -64,6 +66,35 @@ public class ForumCategoryController extends BaseController {
     public ResponseResult<List<ForumCategory>> list(ForumCategory forumCategory){
         LambdaQueryWrapper<ForumCategory> wrapper = new LambdaQueryWrapper<>(forumCategory);
         return success(forumCategoryService.list(wrapper));
+    }
+    
+    @ApiOperation("树状结构列表查询")
+    @GetMapping("/tree")
+    public ResponseResult<List<ForumCategoryTreeVO>> tree(ForumCategory forumCategory) {
+        // 获取所有分类
+        List<ForumCategory> allCategories = forumCategoryService.list(new LambdaQueryWrapper<>(forumCategory));
+        
+        // 转换为树状结构
+        List<ForumCategoryTreeVO> tree = buildCategoryTree(allCategories, 0L);
+        
+        return success(tree);
+    }
+    
+    /**
+     * 构建分类树
+     * @param categories 所有分类
+     * @param parentId 父节点ID
+     * @return 树状结构
+     */
+    private List<ForumCategoryTreeVO> buildCategoryTree(List<ForumCategory> categories, Long parentId) {
+        return categories.stream()
+                .filter(category -> category.getParentId().equals(parentId))
+                .map(category -> {
+                    ForumCategoryTreeVO vo = new ForumCategoryTreeVO(category);
+                    vo.setChildren(buildCategoryTree(categories, category.getId()));
+                    return vo;
+                })
+                .collect(Collectors.toList());
     }
     
     @ApiOperation("获取启用的板块列表（用于前端展示）")

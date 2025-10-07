@@ -40,14 +40,83 @@ CREATE TABLE `comment` (
   KEY `idx_user_id` (`user_id`) USING BTREE,
   KEY `idx_parent_id` (`parent_id`) USING BTREE,
   KEY `idx_rating` (`rating`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='通用评论表';
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='通用评论表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `comment`
 --
 
-INSERT INTO `comment` VALUES (9,1,'product',1,0,NULL,5,'测试阿斯达',0,1,'2025-10-06 08:00:14','2025-10-06 08:00:14'),(10,1,'product',1,0,NULL,NULL,'1231 ',0,1,'2025-10-06 08:00:18','2025-10-06 08:00:18'),(11,1,'product',1,10,NULL,0,'测试',0,1,'2025-10-06 08:03:10','2025-10-06 08:03:10'),(12,1,'product',1,9,NULL,NULL,'测试',0,1,'2025-10-06 08:06:49','2025-10-06 08:06:49'),(13,2,'product',1,0,NULL,4,'测试算阿达打',0,1,'2025-10-06 08:08:29','2025-10-06 08:08:29');
+INSERT INTO `comment` VALUES (9,1,'product',1,0,NULL,5,'测试阿斯达',0,1,'2025-10-06 08:00:14','2025-10-06 08:00:14'),(10,1,'product',1,0,NULL,NULL,'1231 ',0,1,'2025-10-06 08:00:18','2025-10-06 08:00:18'),(11,1,'product',1,10,NULL,0,'测试',0,1,'2025-10-06 08:03:10','2025-10-06 08:03:10'),(12,1,'product',1,9,NULL,NULL,'测试',0,1,'2025-10-06 08:06:49','2025-10-06 08:06:49'),(13,2,'product',1,0,NULL,4,'测试算阿达打',0,1,'2025-10-06 08:08:29','2025-10-06 08:08:29'),(14,1,'forum',1,0,NULL,5,'感谢分享，很有用的浇水技巧！',0,1,'2025-10-07 07:26:10','2025-10-07 07:26:10'),(15,1,'forum',2,0,NULL,4,'学到了，之前我总是浇太多水。',0,1,'2025-10-07 07:26:10','2025-10-07 07:26:10'),(16,1,'forum',3,0,NULL,5,'非常详细，收藏了！',1,1,'2025-10-07 07:26:10','2025-10-07 07:26:10'),(17,1,'forum',1,2,NULL,NULL,'不客气，我们一起学习进步！',0,1,'2025-10-07 07:26:10','2025-10-07 07:26:10'),(18,1,'forum',3,1,NULL,NULL,'是的，浇水确实是个技术活。',0,1,'2025-10-07 07:26:10','2025-10-07 07:26:10'),(19,2,'forum',2,0,NULL,5,'你的玫瑰花园真美！',0,1,'2025-10-07 07:26:10','2025-10-07 07:26:10'),(20,2,'forum',3,0,NULL,4,'拍得很专业，学习了。',0,1,'2025-10-07 07:26:10','2025-10-07 07:26:10'),(21,2,'forum',1,6,NULL,NULL,'谢谢夸奖，我也很喜欢玫瑰。',0,1,'2025-10-07 07:26:10','2025-10-07 07:26:10'),(22,3,'forum',1,0,NULL,3,'可能是浇水过多或者光照不足。',0,1,'2025-10-07 07:26:10','2025-10-07 07:26:10'),(23,3,'forum',2,0,NULL,4,'建议检查一下土壤排水情况。',0,1,'2025-10-07 07:26:10','2025-10-07 07:26:10'),(24,3,'forum',3,9,NULL,NULL,'对，我也觉得是排水问题。',0,1,'2025-10-07 07:26:10','2025-10-07 07:26:10'),(25,4,'forum',3,0,NULL,5,'修剪技巧很重要，收藏了！',0,1,'2025-10-07 07:26:10','2025-10-07 07:26:10'),(26,4,'forum',2,0,NULL,5,'讲得很细致，学到了很多。',0,1,'2025-10-07 07:26:10','2025-10-07 07:26:10'),(27,4,'forum',1,12,NULL,NULL,'很高兴对大家有帮助！',0,1,'2025-10-07 07:26:10','2025-10-07 07:26:10');
+
+--
+-- Table structure for table `forum_category`
+--
+
+DROP TABLE IF EXISTS `forum_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `forum_category` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '板块ID',
+  `name` varchar(100) NOT NULL COMMENT '板块名称',
+  `description` varchar(500) DEFAULT NULL COMMENT '板块描述',
+  `parent_id` bigint DEFAULT '0' COMMENT '父板块ID（用于构建板块树，0表示顶级板块）',
+  `level` tinyint NOT NULL DEFAULT '1' COMMENT '板块级别（1-一级板块，2-二级板块）',
+  `sort` int DEFAULT '0' COMMENT '排序号',
+  `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态（0-禁用，1-启用）',
+  `icon` varchar(255) DEFAULT NULL COMMENT '板块图标URL',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_parent_id` (`parent_id`),
+  KEY `idx_status` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='论坛板块表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `forum_category`
+--
+
+INSERT INTO `forum_category` VALUES (1,'花卉交流','分享花卉种植经验、养护技巧',0,1,1,1,NULL,'2025-10-07 04:56:09','2025-10-07 04:56:09'),(2,'花卉展示','展示自己的花卉作品和收藏',0,1,2,1,NULL,'2025-10-07 04:56:09','2025-10-07 04:56:09'),(3,'问题求助','在养花过程中遇到的问题可以在这里求助',0,1,3,1,NULL,'2025-10-07 04:56:09','2025-10-07 04:56:09'),(4,'玫瑰专区','玫瑰相关话题讨论',1,2,1,1,NULL,'2025-10-07 04:56:09','2025-10-07 04:56:09'),(5,'兰花专区','兰花相关话题讨论',1,2,2,1,NULL,'2025-10-07 04:56:09','2025-10-07 04:56:09');
+
+--
+-- Table structure for table `forum_post`
+--
+
+DROP TABLE IF EXISTS `forum_post`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `forum_post` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '帖子ID',
+  `category_id` bigint NOT NULL COMMENT '板块ID（逻辑关联forum_category表）',
+  `user_id` bigint NOT NULL COMMENT '用户ID（逻辑关联sys_user表）',
+  `title` varchar(200) NOT NULL COMMENT '帖子标题',
+  `content` longtext COMMENT '帖子内容',
+  `post_type` tinyint NOT NULL DEFAULT '1' COMMENT '帖子类型（1-普通文本，2-视频）',
+  `video_url` varchar(500) DEFAULT NULL COMMENT '视频URL（仅当post_type为2时有效）',
+  `cover_image` varchar(500) DEFAULT NULL COMMENT '视频封面图片URL',
+  `view_count` int NOT NULL DEFAULT '0' COMMENT '浏览次数',
+  `like_count` int NOT NULL DEFAULT '0' COMMENT '点赞次数',
+  `favorite_count` int NOT NULL DEFAULT '0' COMMENT '收藏次数',
+  `comment_count` int NOT NULL DEFAULT '0' COMMENT '评论次数',
+  `is_top` tinyint NOT NULL DEFAULT '0' COMMENT '是否置顶（0-否，1-是）',
+  `is_essence` tinyint NOT NULL DEFAULT '0' COMMENT '是否精华（0-否，1-是）',
+  `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态（0-删除，1-正常，2-审核中）',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_category_id` (`category_id`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_status` (`status`),
+  KEY `idx_create_time` (`create_time`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='论坛帖子表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `forum_post`
+--
+
+INSERT INTO `forum_post` VALUES (1,1,1,'如何正确浇水','我想分享一下我这些年养花的经验，浇水是很关键的一步...',1,NULL,NULL,150,20,5,3,0,1,1,'2025-10-07 04:56:09','2025-10-07 07:26:10'),(2,2,2,'我的玫瑰花园','这是我精心打造的玫瑰花园，欢迎大家来欣赏...',1,NULL,NULL,230,45,12,3,1,1,1,'2025-10-07 04:56:09','2025-10-07 07:26:10'),(3,3,3,'叶子发黄怎么办','我的绿萝叶子最近开始发黄，不知道是什么原因...',1,NULL,NULL,89,5,0,2,0,1,1,'2025-10-07 04:56:09','2025-10-07 07:26:10'),(4,4,1,'玫瑰修剪技巧','玫瑰的修剪是门技术活，今天给大家分享几个要点...',1,NULL,NULL,67,12,3,2,0,1,1,'2025-10-07 04:56:09','2025-10-07 04:56:09'),(5,4,1,'测试','<p><img src=\"http://localhost:18091/images/uploads/813ab7a371244ab3bc2afaaeb4ec28c6.png\" alt=\"image.png\" data-href=\"图片加载中...\" style=\"\"/></p>',1,NULL,NULL,307,207,0,51,1,0,1,'2025-10-07 07:19:04','2025-10-07 07:19:04');
 
 --
 -- Table structure for table `merchant_product`
@@ -121,13 +190,14 @@ CREATE TABLE `order` (
   KEY `idx_user_id` (`user_id`) USING BTREE,
   KEY `idx_merchant_id` (`merchant_id`) USING BTREE,
   KEY `idx_status` (`status`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='订单表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='订单表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `order`
 --
 
+INSERT INTO `order` VALUES (3,'ORD202510071233441138',1,1,28.00,0.00,28.00,2,'张三','13800000001','北京市北京市朝阳区三里屯大街18号',1,'2025-10-07 04:33:44',NULL,NULL,'','2025-10-07 12:33:45','2025-10-07 04:36:25');
 
 --
 -- Table structure for table `order_item`
@@ -153,14 +223,14 @@ CREATE TABLE `order_item` (
   KEY `idx_order_id` (`order_id`) USING BTREE,
   KEY `idx_product_id` (`product_id`) USING BTREE,
   KEY `idx_sku_id` (`sku_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='订单明细表';
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='订单明细表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `order_item`
 --
 
-INSERT INTO `order_item` VALUES (1,1,1,2,1,'红玫瑰1','红玫瑰-21朵装',168.00,1,168.00,'2025-10-02 10:00:00','2025-10-02 10:00:00'),(2,1,5,7,1,'有机肥料','有机肥料-1kg装',28.00,2,56.00,'2025-10-02 10:00:00','2025-10-02 10:00:00'),(3,2,2,3,1,'白百合','白百合-6支装',78.00,1,78.00,'2025-10-02 11:00:00','2025-10-02 11:00:00'),(4,3,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 21:10:44','2025-10-06 21:10:44'),(5,4,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 21:12:43','2025-10-06 21:12:43'),(6,5,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 21:14:35','2025-10-06 21:14:35'),(7,6,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 21:15:09','2025-10-06 21:15:09'),(8,7,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 21:16:10','2025-10-06 21:16:10'),(9,8,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,2,356.00,'2025-10-06 21:20:14','2025-10-06 21:20:14'),(10,9,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 22:24:26','2025-10-06 22:24:26'),(11,10,1,1,1,'红玫瑰-测试','红玫瑰-11朵装',109.00,1,109.00,'2025-10-06 22:53:27','2025-10-06 22:53:27'),(12,11,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 22:55:48','2025-10-06 22:55:48'),(13,12,2,3,1,'白百合','白百合-6支装',85.00,1,85.00,'2025-10-07 12:18:40','2025-10-07 12:18:40'),(14,13,5,7,1,'有机肥料','有机肥料-1kg装',28.00,1,28.00,'2025-10-07 12:24:21','2025-10-07 12:24:21');
+INSERT INTO `order_item` VALUES (1,1,1,2,1,'红玫瑰1','红玫瑰-21朵装',168.00,1,168.00,'2025-10-02 10:00:00','2025-10-02 10:00:00'),(2,1,5,7,1,'有机肥料','有机肥料-1kg装',28.00,2,56.00,'2025-10-02 10:00:00','2025-10-02 10:00:00'),(3,2,2,3,1,'白百合','白百合-6支装',78.00,1,78.00,'2025-10-02 11:00:00','2025-10-02 11:00:00'),(4,3,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 21:10:44','2025-10-06 21:10:44'),(5,4,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 21:12:43','2025-10-06 21:12:43'),(6,5,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 21:14:35','2025-10-06 21:14:35'),(7,6,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 21:15:09','2025-10-06 21:15:09'),(8,7,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 21:16:10','2025-10-06 21:16:10'),(9,8,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,2,356.00,'2025-10-06 21:20:14','2025-10-06 21:20:14'),(10,9,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 22:24:26','2025-10-06 22:24:26'),(11,10,1,1,1,'红玫瑰-测试','红玫瑰-11朵装',109.00,1,109.00,'2025-10-06 22:53:27','2025-10-06 22:53:27'),(12,11,1,2,1,'红玫瑰-测试','红玫瑰-21朵装',178.00,1,178.00,'2025-10-06 22:55:48','2025-10-06 22:55:48'),(13,12,2,3,1,'白百合','白百合-6支装',85.00,1,85.00,'2025-10-07 12:18:40','2025-10-07 12:18:40'),(14,13,5,7,1,'有机肥料','有机肥料-1kg装',28.00,1,28.00,'2025-10-07 12:24:21','2025-10-07 12:24:21'),(15,3,5,7,1,'有机肥料','有机肥料-1kg装',28.00,1,28.00,'2025-10-07 12:33:45','2025-10-07 12:33:45');
 
 --
 -- Table structure for table `payment_method`
@@ -483,4 +553,4 @@ INSERT INTO `sys_user_role` VALUES (1,1,1,'2025-09-29 13:17:22'),(2,2,2,'2025-09
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-07 12:33:14
+-- Dump completed on 2025-10-07 15:30:22
