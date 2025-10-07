@@ -41,9 +41,6 @@ public class GlobalJacksonConfig {
             builder.deserializers(new LocalTimeDeserializer(timeFormatter));
             // === 核心部分：注册全局 String 反序列化逻辑 ===
             builder.deserializers(new CustomStringDeserializer());
-
-            builder.serializationInclusion(JsonInclude.Include.NON_EMPTY);
-
         };
     }
 }

@@ -1,34 +1,46 @@
 package vtc.xueqing.flower.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import vtc.xueqing.flower.common.OrderNoGenerator;
 import vtc.xueqing.flower.common.ResponseResult;
 import vtc.xueqing.flower.config.BaseController;
-import vtc.xueqing.flower.entity.Order;
+import vtc.xueqing.flower.entity.*;
+import vtc.xueqing.flower.service.MerchantProductService;
+import vtc.xueqing.flower.service.OrderItemService;
 import vtc.xueqing.flower.service.OrderService;
+import vtc.xueqing.flower.service.ReceiverAddressService;
 import vtc.xueqing.flower.vo.OrderDetailVO;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 订单表;(order)表控制层
  * @author : Xueqing
  */
-// @Api(tags = "订单表对象功能接口")
+@Api(tags = "订单表对象功能接口")
 @RestController
 @RequestMapping("/order")
+@RequiredArgsConstructor
 public class OrderController extends BaseController {
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
+    private final MerchantProductService merchantProductService;
+    private final ReceiverAddressService receiverAddressService;
+    private final OrderItemService orderItemService;
 
     @ApiOperation("通过ID查询单条数据")
     @GetMapping("{id}")
@@ -105,5 +117,52 @@ public class OrderController extends BaseController {
         Order order = orderService.createOrderFromDirectPurchase(userId, merchantProductId, quantity, receiverAddressId);
         
         return success(order);
+    }
+    @ApiOperation("购物车结账")
+    @PostMapping("/cartPurchase")
+    public ResponseResult<Order> createOrderByCartPurchase(
+            @RequestBody List<ShoppingCart> shoppingCarts,
+            @ApiParam("用户ID") @RequestParam Long userId,
+            @ApiParam("备注") @RequestParam String remark,
+            @ApiParam("收货信息ID") @RequestParam Long receiverAddressId) {
+        Order order = cartPurchase(shoppingCarts, userId, remark, receiverAddressId);
+        return success(order);
+    }
+
+    private Order cartPurchase(List<ShoppingCart> shoppingCarts, Long userId, String remark, Long receiverAddressId) {
+        ReceiverAddress receiverAddress = receiverAddressService.getById(receiverAddressId);
+        List<Long> collect = shoppingCarts.stream().map(ShoppingCart::getMerchantProductId).collect(Collectors.toList());
+        BigDecimal totalAmount = shoppingCarts.stream()
+                .map(cart ->
+                        cart.getPrice().multiply(new BigDecimal(cart.getQuantity()))
+                ).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        Map<Long, ShoppingCart> cartMap = shoppingCarts.stream().collect(Collectors.toMap(ShoppingCart::getMerchantProductId, shoppingCart -> shoppingCart));
+        List<MerchantProduct> merchantProducts = merchantProductService.listByIds(collect);
+        Order order = new Order();
+        String orderNo = OrderNoGenerator.generateOrderNo();
+        order.setOrderNo(orderNo);
+        order.setOrderNo(OrderNoGenerator.generateOrderNo());
+        order.setUserId(userId);
+        order.setTotalAmount(totalAmount);
+        order.setDiscountAmount(BigDecimal.ZERO);
+        order.setPayAmount(totalAmount);
+        order.setStatus(1); // 待付款状态
+        order.setReceiverName(receiverAddress.getReceiverName());
+        order.setReceiverPhone(receiverAddress.getReceiverPhone());
+        order.setReceiverAddress(receiverAddress.getDetailAddress());
+        order.setRemark(remark);
+
+        List<OrderItem> orderItems = merchantProducts.stream().map(merchantProduct -> {
+            OrderItem orderItem = new OrderItem();
+            BeanUtil.copyProperties(merchantProduct, orderItem);
+            orderItem.setQuantity(cartMap.get(merchantProduct.getId()).getQuantity());
+            orderItem.setProductName(merchantProduct.getMerchantName());
+            orderItem.setOrderId(order.getId());
+            return orderItem;
+        }).collect(Collectors.toList());
+        orderService.save(order);
+        orderItemService.saveOrUpdateBatch(orderItems);
+        return order;
     }
 }

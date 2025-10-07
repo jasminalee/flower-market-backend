@@ -48,7 +48,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Autowired
     private ReceiverAddressService receiverAddressService;
     
-    @Override
     @Transactional
     public Order createOrderFromDirectPurchase(Long userId, Long merchantProductId, Integer quantity,
                                               String receiverName, String receiverPhone, 
@@ -65,7 +64,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         }
         
         // 获取产品和SKU信息
-        Product product = productService.getById(merchantProduct.getProductId());
         ProductSku productSku = productSkuService.getById(merchantProduct.getSkuId());
         
         // 计算订单金额
@@ -75,7 +73,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         Order order = new Order();
         order.setOrderNo(OrderNoGenerator.generateOrderNo());
         order.setUserId(userId);
-        order.setMerchantId(merchantProduct.getMerchantId());
         order.setTotalAmount(totalAmount);
         order.setDiscountAmount(BigDecimal.ZERO);
         order.setPayAmount(totalAmount);
@@ -84,9 +81,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         order.setReceiverPhone(receiverPhone);
         order.setReceiverAddress(receiverAddress);
         order.setRemark(remark);
-        order.setCreateTime(LocalDateTime.now());
-        order.setUpdateTime(LocalDateTime.now());
-        
+
         // 保存订单主表
         this.save(order);
         
@@ -96,7 +91,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         orderItem.setProductId(merchantProduct.getProductId());
         orderItem.setSkuId(merchantProduct.getSkuId());
         orderItem.setMerchantId(merchantProduct.getMerchantId());
-        orderItem.setProductName(product.getProductName());
+        orderItem.setProductName(merchantProduct.getMerchantName());
         orderItem.setSkuName(productSku.getSkuName());
         orderItem.setPrice(merchantProduct.getPrice());
         orderItem.setQuantity(quantity);

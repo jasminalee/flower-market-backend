@@ -170,7 +170,6 @@ CREATE TABLE `order` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '订单ID',
   `order_no` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '订单编号',
   `user_id` bigint NOT NULL COMMENT '用户ID（逻辑关联sys_user表）',
-  `merchant_id` bigint NOT NULL COMMENT '商户ID（逻辑关联sys_user表）',
   `total_amount` decimal(10,2) NOT NULL COMMENT '订单总金额',
   `discount_amount` decimal(10,2) DEFAULT NULL COMMENT '优惠金额',
   `pay_amount` decimal(10,2) NOT NULL COMMENT '实际支付金额',
@@ -188,7 +187,6 @@ CREATE TABLE `order` (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `uk_order_no` (`order_no`) USING BTREE,
   KEY `idx_user_id` (`user_id`) USING BTREE,
-  KEY `idx_merchant_id` (`merchant_id`) USING BTREE,
   KEY `idx_status` (`status`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC COMMENT='订单表';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -197,7 +195,10 @@ CREATE TABLE `order` (
 -- Dumping data for table `order`
 --
 
-INSERT INTO `order` VALUES (3,'ORD202510071233441138',1,1,28.00,0.00,28.00,2,'张三','13800000001','北京市北京市朝阳区三里屯大街18号',1,'2025-10-07 04:33:44',NULL,NULL,'','2025-10-07 12:33:45','2025-10-07 04:36:25');
+INSERT INTO `order`
+VALUES (3, 'ORD202510071233441138', 1, 28.00, 0.00, 28.00, 2, '张三', '13800000001',
+        '北京市北京市朝阳区三里屯大街18号', 1, '2025-10-07 04:33:44', NULL, NULL, '', '2025-10-07 12:33:45',
+        '2025-10-07 04:36:25');
 
 --
 -- Table structure for table `order_item`

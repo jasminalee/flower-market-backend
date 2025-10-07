@@ -46,12 +46,12 @@ public class CommentController extends BaseController {
     @ApiOperation("根据来源ID和类型查询评论列表")
     @GetMapping("/source")
     public ResponseResult<List<Comment>> listBySource(
-            @RequestParam Long sourceId,
-            @RequestParam String sourceType,
+            @RequestParam(required = false) Long sourceId,
+            @RequestParam(required = false) String sourceType,
             Long parentId) {
         LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Comment::getSourceId, sourceId)
-                .eq(Comment::getSourceType, sourceType)
+        wrapper.eq(sourceId != null, Comment::getSourceId, sourceId)
+                .eq(StrUtil.isNotBlank(sourceType), Comment::getSourceType, sourceType)
                 .eq(Objects.nonNull(parentId), Comment::getParentId, parentId)
                 .eq(Comment::getStatus, 1)
                 .orderByDesc(Comment::getCreateTime);

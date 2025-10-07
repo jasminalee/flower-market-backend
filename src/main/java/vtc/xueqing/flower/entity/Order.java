@@ -39,10 +39,6 @@ public class Order implements Serializable, Cloneable {
     @NotNull(message = "用户ID不能为空")
     private Long userId;
 
-    @ApiModelProperty("商户ID（逻辑关联sys_user表）")
-    @NotNull(message = "商户ID不能为空")
-    private Long merchantId;
-
     @ApiModelProperty("订单总金额")
     @NotNull(message = "订单总金额不能为空")
     private BigDecimal totalAmount;
