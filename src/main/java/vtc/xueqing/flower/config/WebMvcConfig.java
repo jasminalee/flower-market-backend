@@ -1,6 +1,8 @@
 package vtc.xueqing.flower.config;
 
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -9,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * 用于配置静态资源映射等
  */
 @Configuration
-public class WebMvcConfig implements WebMvcConfigurer {
+public class WebMvcConfig implements WebMvcConfigurer  {
     
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
