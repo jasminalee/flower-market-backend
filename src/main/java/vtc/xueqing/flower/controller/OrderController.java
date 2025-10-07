@@ -13,10 +13,7 @@ import vtc.xueqing.flower.common.OrderNoGenerator;
 import vtc.xueqing.flower.common.ResponseResult;
 import vtc.xueqing.flower.config.BaseController;
 import vtc.xueqing.flower.entity.*;
-import vtc.xueqing.flower.service.MerchantProductService;
-import vtc.xueqing.flower.service.OrderItemService;
-import vtc.xueqing.flower.service.OrderService;
-import vtc.xueqing.flower.service.ReceiverAddressService;
+import vtc.xueqing.flower.service.*;
 import vtc.xueqing.flower.vo.OrderDetailVO;
 
 import javax.validation.Valid;
@@ -26,6 +23,7 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +39,7 @@ public class OrderController extends BaseController {
     private final MerchantProductService merchantProductService;
     private final ReceiverAddressService receiverAddressService;
     private final OrderItemService orderItemService;
+    private final ProductSkuService productSkuService;
 
     @ApiOperation("通过ID查询单条数据")
     @GetMapping("{id}")
@@ -123,14 +122,21 @@ public class OrderController extends BaseController {
     public ResponseResult<Order> createOrderByCartPurchase(
             @RequestBody List<ShoppingCart> shoppingCarts,
             @ApiParam("用户ID") @RequestParam Long userId,
-            @ApiParam("备注") @RequestParam String remark,
-            @ApiParam("收货信息ID") @RequestParam Long receiverAddressId) {
+            @ApiParam("备注") @RequestParam(required = false) String remark,
+            @ApiParam("收货信息ID") @RequestParam(required = false) Long receiverAddressId) {
         Order order = cartPurchase(shoppingCarts, userId, remark, receiverAddressId);
         return success(order);
     }
 
-    private Order cartPurchase(List<ShoppingCart> shoppingCarts, Long userId, String remark, Long receiverAddressId) {
-        ReceiverAddress receiverAddress = receiverAddressService.getById(receiverAddressId);
+    private Order cartPurchase(
+            List<ShoppingCart> shoppingCarts,
+            Long userId,
+            String remark,
+            Long receiverAddressId) {
+        ReceiverAddress receiverAddress = new ReceiverAddress();
+        if (Objects.nonNull(receiverAddressId))
+            receiverAddress = receiverAddressService.getById(receiverAddressId);
+
         List<Long> collect = shoppingCarts.stream().map(ShoppingCart::getMerchantProductId).collect(Collectors.toList());
         BigDecimal totalAmount = shoppingCarts.stream()
                 .map(cart ->
@@ -139,10 +145,13 @@ public class OrderController extends BaseController {
 
         Map<Long, ShoppingCart> cartMap = shoppingCarts.stream().collect(Collectors.toMap(ShoppingCart::getMerchantProductId, shoppingCart -> shoppingCart));
         List<MerchantProduct> merchantProducts = merchantProductService.listByIds(collect);
+        List<Long> skuIds = merchantProducts.stream().map(MerchantProduct::getSkuId).collect(Collectors.toList());
+        List<ProductSku> productSkus = productSkuService.listByIds(skuIds);
+        Map<Long, ProductSku> skuMap = productSkus.stream().collect(Collectors.toMap(ProductSku::getId, sku -> sku));
+
         Order order = new Order();
         String orderNo = OrderNoGenerator.generateOrderNo();
         order.setOrderNo(orderNo);
-        order.setOrderNo(OrderNoGenerator.generateOrderNo());
         order.setUserId(userId);
         order.setTotalAmount(totalAmount);
         order.setDiscountAmount(BigDecimal.ZERO);
@@ -153,15 +162,21 @@ public class OrderController extends BaseController {
         order.setReceiverAddress(receiverAddress.getDetailAddress());
         order.setRemark(remark);
 
+        // 先保存订单，获取生成的订单ID
+        orderService.save(order);
+        
         List<OrderItem> orderItems = merchantProducts.stream().map(merchantProduct -> {
             OrderItem orderItem = new OrderItem();
             BeanUtil.copyProperties(merchantProduct, orderItem);
             orderItem.setQuantity(cartMap.get(merchantProduct.getId()).getQuantity());
             orderItem.setProductName(merchantProduct.getMerchantName());
+            orderItem.setSkuName(skuMap.get(merchantProduct.getSkuId()).getSkuName());
+            // 使用已保存订单的ID
             orderItem.setOrderId(order.getId());
+            // 计算总价
+            orderItem.setTotalPrice(orderItem.getPrice().multiply(new BigDecimal(orderItem.getQuantity())));
             return orderItem;
         }).collect(Collectors.toList());
-        orderService.save(order);
         orderItemService.saveOrUpdateBatch(orderItems);
         return order;
     }
